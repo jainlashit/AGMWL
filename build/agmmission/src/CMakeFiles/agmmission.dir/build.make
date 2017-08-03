@@ -553,11 +553,6 @@ agmmission_EXTERNAL_OBJECTS =
 ../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtGui.so
 ../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtXml.so
 ../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtCore.so
-../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtOpenGL.so
-../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtGui.so
-../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtXml.so
-../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtCore.so
-../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libxml2.so
 ../tools/agmmission/bin/agmmission: /usr/lib/libosg.so
 ../tools/agmmission/bin/agmmission: /usr/lib/libosgDB.so
 ../tools/agmmission/bin/agmmission: /usr/lib/libosgViewer.so
@@ -571,6 +566,11 @@ agmmission_EXTERNAL_OBJECTS =
 ../tools/agmmission/bin/agmmission: /usr/lib/libosgDB.so
 ../tools/agmmission/bin/agmmission: /usr/lib/libosgViewer.so
 ../tools/agmmission/bin/agmmission: /usr/lib/libOpenThreads.so
+../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtOpenGL.so
+../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtGui.so
+../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtXml.so
+../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libQtCore.so
+../tools/agmmission/bin/agmmission: /usr/lib/x86_64-linux-gnu/libxml2.so
 ../tools/agmmission/bin/agmmission: agmmission/src/CMakeFiles/agmmission.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ../../../tools/agmmission/bin/agmmission"
 	cd /home/lashit/AGM/GSoC/AGMWL/build/agmmission/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/agmmission.dir/link.txt --verbose=$(VERBOSE)

@@ -182,58 +182,6 @@ AGMExecutive.h
 AGMWorldModel.h
 -
 
-/home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src/AGMExecutive.cpp
-AGMExecutive.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src/AGMWorldModel.cpp
-AGMWorldModel.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src/CommonBehavior.cpp
-CommonBehavior.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src/Planning.cpp
-Planning.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
 /home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src/agminner_automoc.cpp
 moc_commonbehaviorI.cpp
 /home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src/moc_commonbehaviorI.cpp
@@ -266,10 +214,6 @@ moc_specificworker.cpp
 ../../../../tools/agminner/src/specificworker.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/specificworker.h
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/commonbehaviorI.cpp
-commonbehaviorI.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/commonbehaviorI.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/commonbehaviorI.h
 QtCore/QObject
 -
@@ -286,10 +230,6 @@ genericmonitor.h
 
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/config.h
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericmonitor.cpp
-genericmonitor.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericmonitor.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericmonitor.h
 Ice/Ice.h
 -
@@ -303,10 +243,6 @@ qlog/qlog.h
 -
 CommonBehavior.h
 -
-
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericworker.cpp
-genericworker.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericworker.h
 
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericworker.h
 config.h
@@ -362,10 +298,6 @@ Planning.h
 AGMExecutive.h
 -
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/specificmonitor.cpp
-specificmonitor.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/specificmonitor.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/specificmonitor.h
 genericmonitor.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agminner/src/genericmonitor.h
@@ -388,10 +320,6 @@ QHash
 QList
 -
 
-/home/lashit/Lashit/Projects/robocomp/classes/qlog/qlog.cpp
-qlog.h
-/home/lashit/Lashit/Projects/robocomp/classes/qlog/qlog.h
-
 /home/lashit/Lashit/Projects/robocomp/classes/qlog/qlog.h
 config.h
 /home/lashit/Lashit/Projects/robocomp/classes/qlog/config.h
@@ -401,10 +329,6 @@ iostream
 -
 Logger.h
 -
-
-/home/lashit/Lashit/Projects/robocomp/classes/rapplication/rapplication.cpp
-rapplication.h
-/home/lashit/Lashit/Projects/robocomp/classes/rapplication/rapplication.h
 
 /home/lashit/Lashit/Projects/robocomp/classes/rapplication/rapplication.h
 Ice/Ice.h

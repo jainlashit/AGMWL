@@ -1,7 +1,7 @@
 import os
 import traceback
 import sys
-from parser import Parser
+from AGMParser import Parser
 from classifier import Classifier
 
 

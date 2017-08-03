@@ -28,6 +28,8 @@
 /usr/local/share/agm/agglplannerplan.py
 /usr/local/bin/agglplan
 /usr/local/share/agm/agglplan.py
+/usr/local/bin/agglplan2
+/usr/local/share/agm/agglplan2.py
 /usr/local/bin/agglcheckhierarchical
 /usr/local/share/agm/pyparsinglocal.py
 /usr/local/bin/agglplannerserver
@@ -40,17 +42,11 @@
 /usr/local/share/agm/AGMModule.py
 /usr/local/share/agm/AGMModelConversion.py
 /usr/local/share/agm/AGGL.py
-/usr/local/bin/classifier
 /usr/local/share/agm/classifier.py
-/usr/local/bin/const
 /usr/local/share/agm/const.py
-/usr/local/bin/generate
 /usr/local/share/agm/generate.py
-/usr/local/bin/parser
-/usr/local/share/agm/parser.py
-/usr/local/bin/test
+/usr/local/share/agm/AGMParser.py
 /usr/local/share/agm/test.py
-/usr/local/bin/train
 /usr/local/share/agm/train.py
 /usr/local/share/agm/ui_guiAGGLEditor.py
 /usr/local/share/agm/ui_guiGraphViewer.py

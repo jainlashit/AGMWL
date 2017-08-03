@@ -31,7 +31,7 @@
     @ingroup PyAPI
     This file loads the grammar, the initial state of the world and the GOAL status without changing the files extensions of the grammar and the goal.
 
-    MODE USE:	agglplan2 gramatica.aggl init.xml target.xml
+    MODE USE:	agglplan gramatica.aggl init.xml target.xml
 
     Also, we can keep the results in a file with: agglplan gramatica.aggl init.xml target.xml result.plan
 """

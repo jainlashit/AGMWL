@@ -160,8 +160,6 @@ vector
 boost/algorithm/string.hpp
 -
 
-/home/lashit/AGM/GSoC/AGMWL/build/agm_xml2pddlProblem_automoc.cpp
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agm_xml2pddlProblem.cpp
 agm.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agm.h

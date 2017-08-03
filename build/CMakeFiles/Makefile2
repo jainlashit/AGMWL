@@ -125,8 +125,8 @@ clean: CMakeFiles/agm_automoc.dir/clean
 # Target rules for target CMakeFiles/agm_xml2pddlProblem.dir
 
 # All Build rule for target.
-CMakeFiles/agm_xml2pddlProblem.dir/all: CMakeFiles/agm_xml2pddlProblem_automoc.dir/all
 CMakeFiles/agm_xml2pddlProblem.dir/all: CMakeFiles/agm.dir/all
+CMakeFiles/agm_xml2pddlProblem.dir/all: CMakeFiles/agm_xml2pddlProblem_automoc.dir/all
 	$(MAKE) -f CMakeFiles/agm_xml2pddlProblem.dir/build.make CMakeFiles/agm_xml2pddlProblem.dir/depend
 	$(MAKE) -f CMakeFiles/agm_xml2pddlProblem.dir/build.make CMakeFiles/agm_xml2pddlProblem.dir/build
 	$(CMAKE_COMMAND) -E cmake_progress_report /home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles  12 13

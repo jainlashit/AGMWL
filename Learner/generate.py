@@ -4,7 +4,8 @@ import os
 import pickle
 import traceback
 sys.path.append('/usr/local/share/agm/')
-from parser import Parser
+# from lashit import Lashit as Parser
+from AGMParser import Parser
 from classifier import Classifier
 from const import AGMConst
 

@@ -3,7 +3,7 @@ import sys
 import os
 import pickle
 import traceback
-from parser import Parser
+from AGMParser import Parser
 from classifier import Classifier
 from const import AGMConst
 

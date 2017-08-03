@@ -284,72 +284,6 @@ AGMCommonBehavior.h
 AGMWorldModel.h
 -
 
-/home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/AGMCommonBehavior.cpp
-AGMCommonBehavior.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/AGMExecutive.cpp
-AGMExecutive.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/AGMWorldModel.cpp
-AGMWorldModel.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/CommonBehavior.cpp
-CommonBehavior.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
-/home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/Planning.cpp
-Planning.h
--
-Ice/LocalException.h
--
-Ice/ObjectFactory.h
--
-Ice/BasicStream.h
--
-Ice/Object.h
--
-IceUtil/Iterator.h
--
-
 /home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/agmmission_automoc.cpp
 moc_agm_modelDrawer.cpp
 /home/lashit/AGM/GSoC/AGMWL/build/agmmission/src/moc_agm_modelDrawer.cpp
@@ -436,10 +370,6 @@ agm_modelSymbols.h
 rcdraw/rcdraw.h
 -
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmcommonbehaviorI.cpp
-agmcommonbehaviorI.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmcommonbehaviorI.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmcommonbehaviorI.h
 QtCore/QObject
 -
@@ -452,10 +382,6 @@ config.h
 genericworker.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericworker.h
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmexecutivetopicI.cpp
-agmexecutivetopicI.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmexecutivetopicI.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmexecutivetopicI.h
 QtCore/QObject
 -
@@ -468,10 +394,6 @@ config.h
 genericworker.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericworker.h
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmexecutivevisualizationtopicI.cpp
-agmexecutivevisualizationtopicI.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmexecutivevisualizationtopicI.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/agmexecutivevisualizationtopicI.h
 QtCore/QObject
 -
@@ -483,10 +405,6 @@ config.h
 -
 genericworker.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericworker.h
-
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/commonbehaviorI.cpp
-commonbehaviorI.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/commonbehaviorI.h
 
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/commonbehaviorI.h
 QtCore/QObject
@@ -503,10 +421,6 @@ genericmonitor.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericmonitor.h
 
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/config.h
-
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericmonitor.cpp
-genericmonitor.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericmonitor.h
 
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericmonitor.h
 Ice/Ice.h
@@ -521,10 +435,6 @@ qlog/qlog.h
 -
 CommonBehavior.h
 -
-
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericworker.cpp
-genericworker.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericworker.h
 
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericworker.h
 config.h
@@ -588,10 +498,6 @@ AGMCommonBehavior.h
 AGMWorldModel.h
 -
 
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/specificmonitor.cpp
-specificmonitor.h
-/home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/specificmonitor.h
-
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/specificmonitor.h
 genericmonitor.h
 /home/lashit/AGM/GSoC/AGMWL/tools/agmmission/src/genericmonitor.h
@@ -624,10 +530,6 @@ osgviewer/osgview.h
 innermodel/innermodelviewer.h
 -
 
-/home/lashit/Lashit/Projects/robocomp/classes/qlog/qlog.cpp
-qlog.h
-/home/lashit/Lashit/Projects/robocomp/classes/qlog/qlog.h
-
 /home/lashit/Lashit/Projects/robocomp/classes/qlog/qlog.h
 config.h
 /home/lashit/Lashit/Projects/robocomp/classes/qlog/config.h
@@ -638,10 +540,6 @@ iostream
 Logger.h
 -
 
-/home/lashit/Lashit/Projects/robocomp/classes/rapplication/rapplication.cpp
-rapplication.h
-/home/lashit/Lashit/Projects/robocomp/classes/rapplication/rapplication.h
-
 /home/lashit/Lashit/Projects/robocomp/classes/rapplication/rapplication.h
 Ice/Ice.h
 -
@@ -651,12 +549,6 @@ IceUtil/IceUtil.h
 -
 QtCore
 -
-
-/home/lashit/Lashit/Projects/robocomp/classes/rcdraw/rcdraw.cpp
-cmath
--
-rcdraw.h
-/home/lashit/Lashit/Projects/robocomp/classes/rcdraw/rcdraw.h
 
 /home/lashit/Lashit/Projects/robocomp/classes/rcdraw/rcdraw.h
 QtGui

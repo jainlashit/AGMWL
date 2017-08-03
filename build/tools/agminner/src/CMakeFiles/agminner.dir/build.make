@@ -421,11 +421,6 @@ agminner_EXTERNAL_OBJECTS =
 ../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtGui.so
 ../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtXml.so
 ../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtCore.so
-../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtOpenGL.so
-../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtGui.so
-../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtXml.so
-../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtCore.so
-../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libxml2.so
 ../tools/agminner/bin/agminner: /usr/lib/libosg.so
 ../tools/agminner/bin/agminner: /usr/lib/libosgDB.so
 ../tools/agminner/bin/agminner: /usr/lib/libosgViewer.so
@@ -439,6 +434,11 @@ agminner_EXTERNAL_OBJECTS =
 ../tools/agminner/bin/agminner: /usr/lib/libosgDB.so
 ../tools/agminner/bin/agminner: /usr/lib/libosgViewer.so
 ../tools/agminner/bin/agminner: /usr/lib/libOpenThreads.so
+../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtOpenGL.so
+../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtGui.so
+../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtXml.so
+../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libQtCore.so
+../tools/agminner/bin/agminner: /usr/lib/x86_64-linux-gnu/libxml2.so
 ../tools/agminner/bin/agminner: tools/agminner/src/CMakeFiles/agminner.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ../../../../tools/agminner/bin/agminner"
 	cd /home/lashit/AGM/GSoC/AGMWL/build/tools/agminner/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/agminner.dir/link.txt --verbose=$(VERBOSE)
