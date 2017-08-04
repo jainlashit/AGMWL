@@ -1,5 +1,9 @@
+# This is a wrapper file built over existing AGM Parsers to be used for Learning Files
 import xml.etree.ElementTree as ET
-
+# import native AGGL Parser to Wrapper
+from parseAGGL import AGMFileDataParsing 
+# import native XML Parse to Wrapper
+from xmlModelParser import *
 
 class Parser:
 
