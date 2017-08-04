@@ -1,1 +1,0 @@
-set(AM_OLD_COMPILE_SETTINGS "QT_CORE_LIB;QT_DLL;QT_GUI_LIB;QT_NO_DEBUG;QT_OPENGL_LIB;QT_XML_LIB ~~~ /home/lashit/AGM/GSoC/AGMWL/.;/home/lashit/AGM/GSoC/AGMWL/libagm;/usr/include/libxml2;/usr/include/qt4;/usr/include/qt4/QtOpenGL;/usr/include/qt4/QtGui;/usr/include/qt4/QtCore;/usr/include ~~~  ~~~ FALSE ~~~ ")
