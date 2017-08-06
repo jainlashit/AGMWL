@@ -29,36 +29,10 @@ class Parser:
 		'''
 		A parser function for files with .aggl extension
 		'''
-		f = open(fileName)
-		parse_flag = False
-		count = 0
-		curr_action = None
-		'''Since actions are out of all nested loops, 
-		therefore count=0 indicates to get ready to read an action name. 
-		'''
-		for line in f:
-			if "===" in line and not parse_flag:
-				''' Ignore visual editor stuff, parsing starts after we encounter
-				=== delimiter. 
-				'''
-				parse_flag = True
-			elif parse_flag:
-				# Assumption : { } and action name are not present on the same line
-				if "{" in line:
-					count += 1
-				elif "}" in line:
-					count -= 1
-				elif count == 0 and line.strip() != "":
-					if "hierarchical" in line:
-						curr_action = line.split()[1]
-						self.action_list.append(line.split()[1])
-					else:
-						curr_action = line.split()[0]
-						self.action_list.append(line.split()[0])
-					self.action_info[curr_action] = ''
-				if curr_action != None:
-					self.action_info[curr_action] += line
-		f.close()
+		agmData = AGMFileDataParsing.fromFile(fileName)
+		for rule in agmData.agm.rules:
+			self.action_list.append(rule.name)
+
 
 	def parse_initM(self, fileName):
 		'''

@@ -54,6 +54,7 @@ class Parser:
 					self.action_info[curr_action] = ''
 				if curr_action != None:
 					self.action_info[curr_action] += line
+		print action_info
 		f.close()
 
 	def parse_initM(self, fileName):
