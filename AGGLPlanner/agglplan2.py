@@ -31,7 +31,7 @@
     @ingroup PyAPI
     This file loads the grammar, the initial state of the world and the GOAL status without changing the files extensions of the grammar and the goal.
 
-    MODE USE:	agglplan gramatica.aggl init.xml target.xml
+    MODE USE:	agglplan2 gramatica.aggl init.xml target.xml
 
     Also, we can keep the results in a file with: agglplan gramatica.aggl init.xml target.xml result.plan
 """
@@ -52,7 +52,7 @@ if __name__ == '__main__': # program domain problem result
 	# If there aren't all the arguments, we show an error mesage with how to use the program.
 	# If there are all the arguments, we keep them in local variables.
 	if len(sys.argv)<5:
-		print 'Usage\n\t', sys.argv[0], ' domain.aggl init.xml target.xml prb_distrb.prb [result.plan]'
+		print 'Usage\n\t', sys.argv[0], ' domain.aggl init.xml target.aggt store.data [result.plan]'
 	else:
 		## the file that contains the grammar rules
 		domainFile = sys.argv[1]

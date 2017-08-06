@@ -1,10 +1,11 @@
+import sys, os
+sys.path.append('/usr/local/share/agm/')
 from pyparsinglocal import Word, alphas, alphanums, nums, OneOrMore, CharsNotIn
 from pyparsinglocal import Literal, CaselessLiteral, Combine, Optional, Suppress
 from pyparsinglocal import ZeroOrMore, Group, StringEnd, srange, Each
 from AGGL import *
 #from PySide.QtCore import *
 #from PySide.QtGui import *
-import sys, os
 from parseQuantifiers import *
 
 debug = False
@@ -306,6 +307,7 @@ class AGMFileDataParsing:
 				#print i.precondition[0]
 				#print i.effect[0]
 				number = number + 1
+
 		return agmFD
 
 	@staticmethod

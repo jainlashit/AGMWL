@@ -35,6 +35,10 @@ class Parser:
 
 
 	def parse_initM(self, fileName):
+		graph = graphFromXML(fileName)
+		
+		print(graph.links)
+		print(graph.nodes)
 		'''
 		Parse xml file (initial world model)
 		'''
@@ -55,6 +59,13 @@ class Parser:
 					self.relMap[id_pair] = [child.attrib['label']]
 				else:
 					self.relMap[id_pair].append(child.attrib['label'])
+		
+		print("---------------------------------------------------------------")
+		print("---------------------------------------------------------------")
+		print("---------------------------------------------------------------")
+
+		print(self.typeMap)
+		print(self.relMap)
 	
 	def parse_plan(self, fileName):
 		'''
@@ -73,6 +84,11 @@ class Parser:
 	
 
 	def parse_target(self, fileName):
+
+		agmData = AGMFileDataParsing.targetFromFile(fileName)
+		print(agmData['graph'].nodes)
+		print(agmData['graph'].links)	
+
 		'''
 		Parse files with .aggt extension, target files (with respect to planner not classifier)
 		'''
@@ -165,6 +181,8 @@ class Parser:
 									for relation in self.relMap[id_pair]:
 										self.attr_link.append((type1, relation, type2))
 										self.attr_link.append((type1, relation, rel, type2))
+		print(self.attr_node)
+		print(self.attr_link)
 
 		f.close()
 

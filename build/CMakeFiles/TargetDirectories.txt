@@ -1,0 +1,13 @@
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/agm.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/agm_automoc.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/agm_xml2pddlProblem.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/agm_xml2pddlProblem_automoc.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/agm_xmlViewer3D.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/agm_xmlViewer3D_automoc.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/resource_rc.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/testagm.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/testagm_automoc.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/ui_agglTypeEditor.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/ui_appearance.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/ui_guiAGGLEditor.dir
+/home/lashit/AGM/GSoC/AGMWL/build/CMakeFiles/ui_guiGraphViewer.dir

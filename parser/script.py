@@ -1,8 +1,8 @@
 import sys
 from tempParser import Parser
-
-fileName = sys.argv[1]
+initFile = sys.argv[1]
+# targetFile = sys.argv[2]
 
 p = Parser()
-print(p.parse_domain(fileName))
+print(p.parse_initM(initFile))
 
