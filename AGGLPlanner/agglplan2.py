@@ -31,9 +31,9 @@
     @ingroup PyAPI
     This file loads the grammar, the initial state of the world and the GOAL status without changing the files extensions of the grammar and the goal.
 
-    MODE USE:	agglplan2 gramatica.aggl init.xml target.xml
+    MODE USE:	agglplan2 grammar.aggl init.xml target.aggt store.data
 
-    Also, we can keep the results in a file with: agglplan gramatica.aggl init.xml target.xml result.plan
+    Also, we can keep the results in a file with: agglplan grammar.aggl init.xml target.xml result.plan
 """
 
 # Python distribution imports
@@ -43,7 +43,7 @@ sys.path.append('/usr/local/share/agm/')
 from AGGL import *
 from parseAGGL import *
 from generateAGGLPlannerCode import *
-from agglplanner import *
+from agglplanner2 import *
 from agglplanchecker import *
 from generate import Generate
 
@@ -81,7 +81,7 @@ if __name__ == '__main__': # program domain problem result
 
 		## Generate target Python file.
 		if targetFile.lower().endswith('.aggt'):
-			outputText = generateTarget_AGGT(AGMFileDataParsing.targetFromFile(targetFile))
+			outputText = generateTarget_AGGT(agmData, AGMFileDataParsing.targetFromFile(targetFile))
 		else:
 			# This sentence creates a graph based on the target world status
 			graph = graphFromXMLFile(targetFile)
@@ -98,9 +98,9 @@ if __name__ == '__main__': # program domain problem result
 		## We store the initial or start time of the planner and call the agglplaner, the main program that makes all the process...
 		start = time.time()
 		if result:
-			subprocess.call(["agglplanner", domainFile, "/tmp/domain.py", worldFile, "/tmp/target.py", threshFile, result])
+			subprocess.call(["agglplanner2", domainFile, "/tmp/domain.py", worldFile, "/tmp/target.py", threshFile, result])
 		else:
-			subprocess.call(["agglplanner", domainFile, "/tmp/domain.py", worldFile, "/tmp/target.py", threshFile])
+			subprocess.call(["agglplanner2", domainFile, "/tmp/domain.py", worldFile, "/tmp/target.py", threshFile])
 		## We store the final time of the planner to calculate the total duration of the program
 		end = time.time()
 		print 'It took', end - start, 'seconds'

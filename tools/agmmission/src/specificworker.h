@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2006-2010 by RoboLab - University of Extremadura
+ *    Copyright (C)2017 by YOUR NAME HERE
  *
  *    This file is part of RoboComp
  *
@@ -16,10 +16,14 @@
  *    You should have received a copy of the GNU General Public License
  *    along with RoboComp.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+       \brief
+       @author Luis J. Manso
+*/
+
 #ifndef SPECIFICWORKER_H
 #define SPECIFICWORKER_H
-
-
 
 #include <agm_modelDrawer.h>
 #include <graphModelViewer.h>
@@ -37,11 +41,6 @@
 	#include <innermodel/innermodelviewer.h>
 #endif
 
-/**
-	   \brief
-	   @author authorname
-*/
-
 class SpecificWorker : public GenericWorker
 {
 Q_OBJECT
@@ -50,21 +49,8 @@ public:
 	~SpecificWorker();
 	void structuralChange(const RoboCompAGMWorldModel::World &w);
 	void edgesUpdated(const RoboCompAGMWorldModel::EdgeSequence &es);
-	void edgeUpdated(const RoboCompAGMWorldModel::Edge &e);
-	void symbolUpdated(const RoboCompAGMWorldModel::Node &n);
 	void symbolsUpdated(const RoboCompAGMWorldModel::NodeSequence &ns);
-	void update(const RoboCompAGMWorldModel::World &a, const string &target, const RoboCompPlanning::Plan &p);
 
-	bool setParams(RoboCompCommonBehavior::ParameterList params) { return true; }
-	bool activateAgent(const ParameterMap& params) {return true; }
-	bool deactivateAgent() {return true; }
-	StateStruct getAgentState() { StateStruct a; return a; }
-	ParameterMap getAgentParameters() { ParameterMap a; return a; }
-	bool setAgentParameters(const ParameterMap& params);
-	void killAgent() {}
-	int uptimeAgent() { return 1; }
-	bool reloadConfigAgent() { return true; }
-//	void set3DViewer();
 
 public slots:
 	

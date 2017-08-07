@@ -13,10 +13,24 @@ COPY_OPTION = "copy.deepcopy"
 debug = False
 scorePerContition = 100
 
+def generateTypeCode(agm):
+	ret = """
+def typeValid(nodeType, theType):
+	if theType == nodeType: return True
+"""
+	inverseTypes = agm.getInverseTypes()
+	for t in inverseTypes:
+		ret += "	elif theType == '" + t + "': return nodeType in " + str(inverseTypes[t]) + "\n"
+	ret += """	else:
+		print 'unknown type!', theType
+		sys.exit(-1)
+"""
+	return ret
+
 
 ## Returns the necessary header of the python version of a grammar
 # @ingroup AGGLGeneration
-def constantHeader():
+def constantHeader(agm):
 	return """import copy, sys, cPickle
 sys.path.append('/usr/local/share/agm/')
 from AGGL import *
@@ -51,7 +65,8 @@ def computePlanCost(node):
 		iters += 1
 		ret += cost + (1-success)*sumActionCosts(node, iters)
 	return ret
-	
+
+""" + generateTypeCode(agm) + """
 
 lastNodeId = 0
 
@@ -185,7 +200,7 @@ def newLinkScore(linkList, newSymbol, alreadyThere):
 #
 # @retval the string with the code
 #
-def ruleImplementation(rule):
+def ruleImplementation(agm, rule):
 	# We dont work with passive rules.
 	if rule.passive: return ''
 	ret = ''
@@ -194,14 +209,14 @@ def ruleImplementation(rule):
 	# We distinguish between normal rules and combo rules.
 	if type(rule) == AGMRule:
 		#print rule.name, 'normal'
-		ret += normalRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False)
+		ret += normalRuleImplementation(agm, rule, indent, thisIsActuallyAHierarchicalRule=False)
 	elif type(rule) == AGMComboRule:
 		#print rule.name, 'combo'
-		ret += comboRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False)
+		ret += comboRuleImplementation(agm, rule, indent, thisIsActuallyAHierarchicalRule=False)
 	elif type(rule) == AGMHierarchicalRule:
 		#print rule.name, 'hierarchical'
-		ret += normalRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=True)
-		ret += generateTarget(rule.rhs, rule.name, rule.lhs)
+		ret += normalRuleImplementation(agm, rule, indent, thisIsActuallyAHierarchicalRule=True)
+		ret += generateTarget(agm, rule.rhs, rule.name, rule.lhs)
 
 #ret += comboRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=True)
 	else:
@@ -217,7 +232,7 @@ def ruleImplementation(rule):
 # @param indent
 #
 # @retval the string with the code
-def comboRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False):
+def comboRuleImplementation(agm, rule, indent, thisIsActuallyAHierarchicalRule=False):
 	ret = ''
 	ret += indent+"def " + rule.name + "(self, snode, stackP=None, equivalencesP=None):"
 	indent += "\t"
@@ -299,7 +314,7 @@ def comboRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False)
 # @param indent
 #
 # @retval the string with the code
-def normalRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False):
+def normalRuleImplementation(agm, rule, indent, thisIsActuallyAHierarchicalRule=False):
 	ret = ''
 	# Quantifier-related code (PARAMETERS)
 	# <<<
@@ -395,10 +410,10 @@ def normalRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False
 		indent += "\t"
 		ret += indent+"symbol_"+n+" = nodes[symbol_"+n+"_name]"
 		ret += indent+"n2id['"+n+"'] = symbol_"+n+"_name"
-		ret += indent+"if symbol_"+n+".sType == '"+nodesPlusParameters[n].sType+"'"
+		ret += indent+"if typeValid(symbol_"+n+".sType, '"+nodesPlusParameters[n].sType+"')"
 		for other in symbols_in_stack:
 			ret += " and symbol_"+n+".name!=symbol_" + str(other) + ".name"
-		conditions, number, ll = extractNewLinkConditionsFromList(rule.lhs.links, n, symbols_in_stack)
+		conditions, number, ll = extractNewLinkConditionsFromList(rule.lhs.links, n, symbols_in_stack+[n])
 		ret += conditions
 		ret += ":"
 		symbols_in_stack.append(n)
@@ -423,7 +438,7 @@ def normalRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False
 	#ret += indent+"print 'Running rule "+rule.name+"'"
 	ret += indent+"stack2        = "+COPY_OPTION+"(stack)"
 	ret += indent+"equivalences2 = "+COPY_OPTION+"(equivalences)"
-	
+
 	ret += indent+"r1 = self."+rule.name+"_trigger(snode, n2id, stack2, inCombo, equivalences2, "+COPY_OPTION+"(finishesCombo))"
 	ret += indent+"c = "+COPY_OPTION+"(r1)"
 	ret += indent+"if 'fina' in locals():"
@@ -488,11 +503,11 @@ def normalRuleImplementation(rule, indent, thisIsActuallyAHierarchicalRule=False
 		for n in optimal_node_list:
 			lelele += 1
 			ret += indent+"test_symbol_"+n+" = snode.graph.nodes[n2id['"+n+"']]"
-			ret += indent+"if not (test_symbol_"+n+".sType == '"+nodesPlusParameters[n].sType+"'"
-			moreErrorInformation = "if verbose: print 'test_symbol_"+n+"(',"+"n2id['"+n+"'],').sType == "+nodesPlusParameters[n].sType+"' , test_symbol_"+n+".sType == '"+nodesPlusParameters[n].sType+"'"
+			ret += indent+"if not (typeValid(test_symbol_"+n+".sType, '"+nodesPlusParameters[n].sType+"')"
+			moreErrorInformation = "if verbose: print 'test_symbol_"+n+"(',"+"n2id['"+n+"'],').sType == "+nodesPlusParameters[n].sType+"' , typeValid(test_symbol_"+n+".sType, '"+nodesPlusParameters[n].sType+"')"
 			for other in symbols_in_stack:
 				ret += " and test_symbol_"+n+".name!=test_symbol_" + str(other) + ".name"
-			conditions, number, linksInfo = extractNewLinkConditionsFromList(rule.lhs.links, n, symbols_in_stack)
+			conditions, number, linksInfo = extractNewLinkConditionsFromList(rule.lhs.links, n, symbols_in_stack+[n])
 			ret += conditions
 			ret += "):"
 			symbols_in_stack.append(n)
@@ -666,7 +681,7 @@ def normalRuleImplementation_PRECONDITION(precondition, indent, modifier='', stu
 			ret += indent+"if precondition"+str(formulaId)+"==False: break"
 			ret += indent+"symbol_"+n+" = nodes[symbol_"+n+"_name]"
 			ret += indent+"n2id['"+n+"'] = symbol_"+n+"_name"
-			ret += indent+"if symbol_"+n+".sType == '"+t+"':  # now the body of the FORALL"
+			ret += indent+"if typeValid(symbol_"+n+".sType, '"+t+"'):  # now the body of the FORALL"
 			indent += "\t"
 		text, indent, formulaIdRet, stuff = normalRuleImplementation_PRECONDITION(preconditionBody[1], indent, 'forall', stuff)
 		ret += text
@@ -695,6 +710,13 @@ def normalRuleImplementation_PRECONDITION(precondition, indent, modifier='', stu
 	elif preconditionType == "retype":
 		print '\'retype\' statements are not allowed in preconditions'
 		sys.exit(1)
+	elif preconditionType == "eq":
+		try:
+			ret += indent + 'precondition'+str(formulaId) + ' = ' + preconditionBody[0] + " == " + preconditionBody[1] + ' # EQ 1'
+		except:
+			print 'ERROR IN', preconditionType
+			print 'ERROR IN', preconditionBody
+			traceback.print_exc()
 	else:
 		try:
 			ret += indent+'precondition'+str(formulaId) + ' = ['
@@ -771,7 +793,7 @@ def normalRuleImplementation_EFFECT(effect, indent, modifier='', stuff=None):
 			indent += "\t"
 			ret += indent+"symbol_"+n+" = nodes[symbol_"+n+"_name]"
 			ret += indent+"n2id['"+n+"'] = symbol_"+n+"_name"
-			ret += indent+"if symbol_"+n+".sType == '"+t+"':  # now the body of the FORALL"
+			ret += indent+"if typeValid(symbol_"+n+".sType, '"+t+"'):  # now the body of the FORALL"
 			indent += "\t"
 		text, indent, formulaIdRet, stuff = normalRuleImplementation_EFFECT(effectBody[1], indent, 'forall', stuff)
 		ret += text
@@ -798,6 +820,20 @@ def normalRuleImplementation_EFFECT(effect, indent, modifier='', stuff=None):
 		ret += indent+"newNode.graph.removeDanglingEdges()"
 	elif effectType == "retype":
 		ret += indent+"newNode.graph.nodes[n2id['"+effectBody[0]+"']].sType = '"+effectBody[1]+"'"
+	elif effectType == "eq":
+		if effectBody[0] == '':
+			raise Exception('ERROR IN: '+str(effect))
+		try:
+			if stuff['mode'] == "condition":
+				ret += indent+'condition'+str(formulaId) + ' = '
+				ret += 'n2id["' + effectBody[0] + '"] == n2id["' + effectBody[1] + '"]  # EQ 2'
+			else:
+				print 'Effects can\'t contain eq operators'
+				sys.exit(-1)
+		except:
+			print 'ERROR IN', effectType
+			print 'ERROR IN', effectBody
+			traceback.print_exc()
 	else:
 		if effectBody[0] == '':
 			raise Exception('ERROR IN: '+str(effect))
@@ -823,18 +859,17 @@ def normalRuleImplementation_EFFECT(effect, indent, modifier='', stuff=None):
 
 
 
-##  djijo ioju oij o
 #
 # @ingroup AGGLGeneration
 #
 def generate(agm, skipPassiveRules):
 	text = ''
-	text += constantHeader()
+	text += constantHeader(agm)
 	text += ruleDeclaration(agm)
 	text += ruleTriggerDeclaration(agm)
 	text += hierarchicalTargetsDeclaration(agm)
 	for rule in agm.rules:
-		text += ruleImplementation(rule)
+		text += ruleImplementation(agm, rule)
 	return text
 
 
@@ -899,11 +934,7 @@ def getOptimalTargetNodeCheckOrder(graph, lgraph=None):
 # @param lgraph I dont have any idea of this param... It is the graph of the left hand?
 #
 # @retval ret is the python code used to chek the target world state.
-def generateTarget(graph, forHierarchicalRule='', lgraph=None, verbose=False):
-	return generateTarget_VersionMERCEDES(graph, forHierarchicalRule, lgraph, verbose=verbose)
-
-def generateTarget_VersionMERCEDES(graph, forHierarchicalRule='', lgraph=None, verbose=False):
-	#print 'branched targets'
+def generateTarget(agm, graph, forHierarchicalRule='', lgraph=None, verbose=False):
 	# Variables del programa
 	linkList = []   # vector de enlaces del grafo.
 
@@ -922,6 +953,7 @@ def computeMaxScore(a, b, maxScore):
 	for i in b: s+=i
 	if s > maxScore: return s
 	return maxScore\n
+""" + generateTypeCode(agm) + """
 def CheckTarget(graph):\n
 	n2id = dict()                             # diccionario
 	available = copy.deepcopy(graph.nodes)    # lista de nodos del grafo inicial.
@@ -1007,15 +1039,15 @@ def CheckTarget(graph):\n
 				ret += indent+"n2id['"+n+"'] = symbol_"+n+"_name"
 		ret += indent+"linksVal = 0"
 		#ret += indent+"print n2id"
-		for cond in newLinkScore(graph.links, n_n, symbols_in_stack):
+		for cond in newLinkScore(graph.links, n_n, symbols_in_stack+[n_n]):
 			ret += indent+cond
 		ret += indent+"scoreLinks.append(linksVal)"
 		pops.append(indent+'scoreLinks.pop()')
 		ret += indent+"maxScore = computeMaxScore(scoreNodes, scoreLinks, maxScore)"
-		ret += indent+"if symbol_"+n+".sType == '"+graph.nodes[n_n].sType+"'"
+		ret += indent+"if typeValid(symbol_"+n+".sType, '"+graph.nodes[n_n].sType+"')"
 		for other in symbols_in_stack:
 			ret += " and symbol_"+n+".name!=symbol_" + str(other) + ".name"
-		conditions, number, ll = extractNewLinkConditionsFromList(graph.links, n_n, symbols_in_stack)
+		conditions, number, ll = extractNewLinkConditionsFromList(graph.links, n_n, symbols_in_stack+[n_n])
 		conditions = conditions.replace("snode.graph", "graph")
 		conditionsListList.append( [conditions, number] )
 		ret += conditions
@@ -1226,7 +1258,7 @@ def componerSubgrafos(grafo, ramasGrafo, constantes):
 
 
 
-def generateTarget_AGGT(target, forHierarchicalRule='', lgraph=None, verbose=False):
+def generateTarget_AGGT(agm, target, forHierarchicalRule='', lgraph=None, verbose=False):
 	graph = target['graph']
 	linkList = []   # vector de enlaces del grafo.
 	constantes, listaNodos = encontrarOrden(graph, lgraph, verbose)
@@ -1241,6 +1273,7 @@ def computeMaxScore(a, b, maxScore):
 	for i in b: s+=i
 	if s > maxScore: return s
 	return maxScore\n
+""" + generateTypeCode(agm) + """
 def CheckTarget(graph):\n
 	n2id = dict()                             # diccionario
 	available = copy.deepcopy(graph.nodes)    # lista de nodos del grafo inicial.
@@ -1325,15 +1358,15 @@ def CheckTarget(graph):\n
 				ret += indent+"n2id['"+n+"'] = symbol_"+n+"_name"
 		ret += indent+"linksVal = 0"
 		#ret += indent+"print n2id"
-		for cond in newLinkScore(graph.links, n_n, symbols_in_stack):
+		for cond in newLinkScore(graph.links, n_n, symbols_in_stack+[n_n]):
 			ret += indent+cond
 		ret += indent+"scoreLinks.append(linksVal)"
 		pops.append(indent+'scoreLinks.pop()')
 		ret += indent+"maxScore = computeMaxScore(scoreNodes, scoreLinks, maxScore)"
-		ret += indent+"if symbol_"+n+".sType == '"+graph.nodes[n_n].sType+"'"
+		ret += indent+"if typeValid(symbol_"+n+".sType, '"+graph.nodes[n_n].sType+"')"
 		for other in symbols_in_stack:
 			ret += " and symbol_"+n+".name!=symbol_" + str(other) + ".name"
-		conditions, number, ll = extractNewLinkConditionsFromList(graph.links, n_n, symbols_in_stack)
+		conditions, number, ll = extractNewLinkConditionsFromList(graph.links, n_n, symbols_in_stack+[n_n])
 		conditions = conditions.replace("snode.graph", "graph")
 		conditionsListList.append( [conditions, number] )
 		ret += conditions
@@ -1355,7 +1388,6 @@ def CheckTarget(graph):\n
 			realCond += 1
 			#ret += indent+"if " + cond + ": scoreNodes += "+str(scorePerContition)+""
 
-	#print realCond
 	totalCond = realCond
 	if target['precondition'] != None:
 		ret += indent+"if maxScore == " + str(score + realCond*scorePerContition) + ":"
@@ -1448,7 +1480,7 @@ def targetPreconditionImplementation(precondition, indent, modifier='', stuff=No
 			ret += indent+"if precondition"+str(formulaId)+"==False: break"
 			ret += indent+"symbol_"+n+" = graph.nodes[symbol_"+n+"_name]"
 			ret += indent+"n2id['"+n+"'] = symbol_"+n+"_name"
-			ret += indent+"if symbol_"+n+".sType == '"+t+"':  # now the body of the FORALL"
+			ret += indent+"if typeValid(symbol_"+n+".sType, '"+t+"'):  # now the body of the FORALL"
 			indent += "\t"
 		text, indento, formulaIdRet, stuff = targetPreconditionImplementation(preconditionBody[1], indent, 'forall', stuff)
 		ret += text

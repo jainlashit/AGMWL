@@ -79,13 +79,6 @@ class AGMWorldModelParser(xmllib.XMLParser):
 		pass
 
 ## Makes a graph with the information contained in a XML file
-def graphFromXML(path):
-	with open(path, 'r') as filehandle:
-		data = filehandle.read()
-		return graphFromXMLText(data)
-
-
-
 def graphFromXMLFile(path):
 	with open(path, 'r') as filehandle:
 		data = filehandle.read()
