@@ -648,9 +648,9 @@ class AGGLPlanner2(object):
 		# We take the initial time.
 		timeA = datetime.datetime.now()
 		# Size of operator chunk
-		chunkSize = [0.1, 0.2, 0.5, 1.0]
+		chunkSize = [0.3, 0.7, 0.8, 1.0]
 		# TimeSlots for chunks
-		chunkTime = [0.1, 0.1, 0.1, 0.1]
+		chunkTime = [2., 2., 2., 1.]
 		# Chunk pointer
 		chunkNumber = 0
 		# known Flag
@@ -702,6 +702,7 @@ class AGGLPlanner2(object):
 				if timeElapsed > maxTimeWaitLimit or (timeElapsed > maxTimeWaitAchieved and nResults > 0):
 					break
 				if timeElapsedChunk >= chunkTime[chunkNumber]:
+					print 'timeElapsedChunk >= chunkTime[chunkNumber]'
 					break
 				if self.externalStopFlag.get() != 0:
 					self.end_condition.set('ExternalFlag')
