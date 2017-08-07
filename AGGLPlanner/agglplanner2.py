@@ -650,7 +650,7 @@ class AGGLPlanner2(object):
 		# Size of operator chunk
 		chunkSize = [0.3, 0.7, 0.8, 1.0]
 		# TimeSlots for chunks
-		chunkTime = [2., 2., 2., 1.]
+		chunkTime = [10.5, 0.5, 0.25, 0.125]
 		# Chunk pointer
 		chunkNumber = 0
 		# known Flag

@@ -31,9 +31,9 @@
     @ingroup PyAPI
     This file loads the grammar, the initial state of the world and the GOAL status without changing the files extensions of the grammar and the goal.
 
-    MODE USE:	agglplan2 grammar.aggl init.xml target.aggt store.data
+    MODE USE:	agglplan2 grammar.aggl init.xml target.aggt learning.data
 
-    Also, we can keep the results in a file with: agglplan grammar.aggl init.xml target.xml result.plan
+    Also, we can keep the results in a file with: agglplan grammar.aggl init.xml target.xml learning.data result.plan
 """
 
 # Python distribution imports
@@ -104,5 +104,3 @@ if __name__ == '__main__': # program domain problem result
 		## We store the final time of the planner to calculate the total duration of the program
 		end = time.time()
 		print 'It took', end - start, 'seconds'
-
-
