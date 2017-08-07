@@ -650,9 +650,10 @@ class AGGLPlanner2(object):
 		# Size of operator chunk
 		chunkSize = [0.3, 0.7, 0.8, 1.0]
 		# TimeSlots for chunks
-		chunkTime = [3., 1.5, 0.75, 0.5]
+		chunkTime = [10., 0.05, 0.075, 0.05]
+		print chunkTime
 		# Chunk pointer
-		chunkNumber = 0
+		chunkNumber = -1
 		# known Flag
 		knownFlag = False
 
@@ -725,6 +726,9 @@ class AGGLPlanner2(object):
 				except:
 					#traceback.print_exc()
 					if not threadPoolStatus:
+ 						if chunkNumber!=len(chunkSize)-1: # we dont raise IndexError unless we are in the last chunk
+							print 'skipping chunk because the space state was exhausted for the current one'
+							break
 						self.end_condition.set("IndexError")
 						lock.release()
 						return
@@ -732,6 +736,9 @@ class AGGLPlanner2(object):
 					threadPoolStatus.lock()
 					threadPoolStatus[i] = False
 					if not True in threadPoolStatus:
+ 						if chunkNumber!=len(chunkSize)-1: # we dont raise IndexError unless we are in the last chunk
+							print 'skipping chunk because the space state was exhausted for the current one'
+							break
 						self.end_condition.set("IndexError")
 						lock.release()
 						return
