@@ -31,15 +31,14 @@
     @ingroup PyAPI
     This file loads the grammar, the initial state of the world and the GOAL status without changing the files extensions of the grammar and the goal.
 
-    Usage: agglplanner2 grammar.aggl init.xml target.py
+    Usage: agglplanner2 grammar.aggl init.xml targetFile.aggt, target.py, trainFile
 
-    Also, we can keep the results in a file with: agglplanner2 grammar.aggl init.xml target.py result.plan
+    Also, we can keep the results in a file with: agglplanner2 grammar.aggl init.xml targetFile.aggt, target.py, trainFile, result.plan
 """
 
 import time
 #import signal
 import thread
-import pickle
 #signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 import sys, traceback, os, re, threading, time, string, math, copy
@@ -57,6 +56,7 @@ import xmlModelParser
 import agglplanchecker
 from agglplanchecker import *
 from agglplannerplan import *
+from generate import *
 
 # C O N F I G U R A T I O N
 number_of_threads = 0 #4
@@ -358,7 +358,7 @@ class AGGLPlanner2(object):
 	# @param resultFile is the optional name of the file where the plan result will be stored.
 	# @param decomposing: added whe we are decomposing a jerarchical rule
 	# @param awakenRules: the set of rules that are currently available for the planner to find a solution
-	def __init__(self, domainParsed, domainModule, initWorld, target, threshData, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
+	def __init__(self, domainParsed, domainModule, initWorld, targetFile, target, trainFile, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
 		object.__init__(self)
 		self.timeElapsed = 0.
 		self.symbol_mapping = copy.deepcopy(symbol_mapping)
@@ -381,7 +381,6 @@ class AGGLPlanner2(object):
 			print type(initWorld)
 			os._exit(1)
 		self.initWorld.nodeId = 0
-		self.threshData = threshData
 		# Set rule and trigger maps
 		self.domainParsed = domainParsed
 		self.domainModule = domainModule
@@ -404,6 +403,12 @@ class AGGLPlanner2(object):
 
 		# set stop flat
 		self.externalStopFlag = LockableInteger(0)
+		
+		self.trainFile = trainFile
+		self.targetFile = targetFile
+		# Getting Action Preference data
+		g = Generate()
+		self.threshData = sorted(g.get_distrb(worldFile, targetFile, trainFile)) # Sorting actions by relevance
 
 	def setStopFlag(self):
 		print 'got setStopFlag (internal class)'
@@ -566,11 +571,13 @@ class AGGLPlanner2(object):
 					""" The following flag is set so the planning of the hierarchical rule is shown on screen"""
 					firstActionIsHierarchical = True
 					hierarchicalTarget = self.domainModule.getHierarchicalTargets()[ac.name]
-					aaa = AGGLPlanner2( # domainParsed, domainModule, initWorld, target, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
+					aaa = AGGLPlanner2( # domainParsed, domainModule, initWorld, targetFile, target, trainFile, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
 					   self.domainParsed,
 					   self.domainModule,
 					   self.initWorld,
+					   self.targetFile,
 					   hierarchicalTarget,
+					   self.trainFile,
 					   self.indent+'\t',
 					   paramsWithoutNew,
 					   self.excludeList,
@@ -863,22 +870,24 @@ if __name__ == '__main__': # program domain problem result
 		from parseAGGL import AGMFileDataParsing   #AGMFileDataParsing en fichero parseAGGL.py
 		t0 = time.time()
 
-		if len(sys.argv)<6:
-			print 'Usage\n\t', sys.argv[0], ' domain.aggl activeRules.py init.xml target.xml.py [result.plan] [input_hierarchical.plan]'
+		if len(sys.argv)<7:
+			print 'Usage\n\t', sys.argv[0], ' domainFile.aggl activeRules.py init.xml targetFile.aggt target.xml.py trainFile [result.plan] [input_hierarchical.plan]'
 
 		else:
-			domainAGM = AGMFileDataParsing.fromFile(sys.argv[1]) #From domain.aggl
+			domainFile = sys.argv[1] # domain (.aggl) file
+			domainAGM = AGMFileDataParsing.fromFile(domainFile) #From domain.aggl
 			domainPath = sys.argv[2] # Get the activeRules.py path
-			initPath = sys.argv[3]       # Get the inital model or world.
-			targetPath = sys.argv[4] # Get the target model or world.
-			threshData = sorted(pickle.load(open(sys.argv[5]))) # Sorting actions by relevance
+			worldFile = sys.argv[3]   # Get the inital model or world.
+			targetFile = sys.argv[4] # target (.aggt) file
+			targetPath = sys.argv[5] # Get the target model or world.
+			trainFile = sys.argv[6] # Contains all the trained data
 			resultFile = None
-			if len(sys.argv)>=7: resultFile = open(sys.argv[6], 'w')
+			if len(sys.argv)>=8: resultFile = open(sys.argv[7], 'w')
 			hierarchicalInputPlan = None
-			if len(sys.argv)>=8: hierarchicalInputPlan = open(sys.argv[7], 'r')
+			if len(sys.argv)>=9: hierarchicalInputPlan = open(sys.argv[8], 'r')
 
 			domainRuleSet = imp.load_source('module__na_me', domainPath).RuleSet()
 			targetCode = imp.load_source('modeeeule__na_me', targetPath).CheckTarget
-			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, targetCode, threshData, '', dict(), [], resultFile)
+			p = AGGLPlanner2(domainAGM, domainRuleSet, worldFile, targetFile, targetCode, trainFile, '', dict(), [], resultFile)
 			p.run()
 		print 'Total time: ', (time.time()-t0).__str__()

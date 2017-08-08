@@ -45,7 +45,7 @@ from parseAGGL import *
 from generateAGGLPlannerCode import *
 from agglplanner2 import *
 from agglplanchecker import *
-from generate import Generate
+# from generate import Generate
 
 if __name__ == '__main__': # program domain problem result
 	# We check if the program was run with all necessary arguments.
@@ -62,9 +62,9 @@ if __name__ == '__main__': # program domain problem result
 		targetFile = sys.argv[3]
 		## probability distribution over
 		trainFile = sys.argv[4]
-		threshFile = "prb_distrb.prb"
-		g = Generate()
-		g.get_distrb(worldFile, targetFile, trainFile, threshFile)
+		# threshFile = "prb_distrb.prb"
+		# g = Generate()
+		# g.get_distrb(worldFile, targetFile, trainFile, threshFile)
 		## the file name where we keep the results of the program
 		result = None
 		if len(sys.argv)>5:
@@ -98,9 +98,9 @@ if __name__ == '__main__': # program domain problem result
 		## We store the initial or start time of the planner and call the agglplaner, the main program that makes all the process...
 		start = time.time()
 		if result:
-			subprocess.call(["agglplanner2", domainFile, "/tmp/domain.py", worldFile, "/tmp/target.py", threshFile, result])
+			subprocess.call(["agglplanner2", domainFile, "/tmp/domain.py", worldFile, targetFile, "/tmp/target.py", trainFile, result])
 		else:
-			subprocess.call(["agglplanner2", domainFile, "/tmp/domain.py", worldFile, "/tmp/target.py", threshFile])
+			subprocess.call(["agglplanner2", domainFile, "/tmp/domain.py", worldFile, targetFile, "/tmp/target.py", trainFile])
 		## We store the final time of the planner to calculate the total duration of the program
 		end = time.time()
 		print 'It took', end - start, 'seconds'
