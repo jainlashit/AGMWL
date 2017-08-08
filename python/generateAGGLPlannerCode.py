@@ -34,7 +34,7 @@ def constantHeader(agm):
 	return """import copy, sys, cPickle
 sys.path.append('/usr/local/share/agm/')
 from AGGL import *
-from agglplanner import *
+from agglplannerplan import *
 
 def computeMaxScore(a, b, maxScore):
 	s = 0
@@ -1520,7 +1520,3 @@ def targetPreconditionImplementation(precondition, indent, modifier='', stuff=No
 			print 'ERROR IN', preconditionBody
 			traceback.print_exc()
 	return ret, indent, formulaId, stuff
-
-
-
-
