@@ -946,7 +946,7 @@ def generateTarget(agm, graph, forHierarchicalRule='', lgraph=None, verbose=Fals
 	indent = "\n\t"
 
 	if len(forHierarchicalRule)==0:
-		ret += """import copy, sys\nsys.path.append('/usr/local/share/agm/')\nfrom AGGL import *\nfrom agglplanner import *\n
+		ret += """import copy, sys\nsys.path.append('/usr/local/share/agm/')\nfrom AGGL import *\nfrom agglplannerplan import *\n
 def computeMaxScore(a, b, maxScore):
 	s = 0
 	for i in a: s+=i
@@ -1266,7 +1266,7 @@ def generateTarget_AGGT(agm, target, forHierarchicalRule='', lgraph=None, verbos
 	indent = "\n\t"
 
 	if len(forHierarchicalRule)==0:
-		ret += """import copy, sys\nsys.path.append('/usr/local/share/agm/')\nfrom AGGL import *\nfrom agglplanner import *\n
+		ret += """import copy, sys\nsys.path.append('/usr/local/share/agm/')\nfrom AGGL import *\nfrom agglplannerplan import *\n
 def computeMaxScore(a, b, maxScore):
 	s = 0
 	for i in a: s+=i
