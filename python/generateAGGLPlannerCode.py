@@ -931,10 +931,10 @@ def getOptimalTargetNodeCheckOrder(graph, lgraph=None):
 #
 # @param graph is the target graph used to generate the target code.
 # @param forHierarchicalRule is a condition. It means that the target uses hierarchical rules.
-# @param lgraph I dont have any idea of this param... It is the graph of the left hand?
+# @param lgraph It is the graph of the left hand
 #
 # @retval ret is the python code used to chek the target world state.
-def generateTarget(agm, graph, forHierarchicalRule='', lgraph=None, verbose=False):
+def generateTarget(agm, graph, forHierarchicalRule='', lgraph=None, verbose=False, xgraph=None):
 	# Variables del programa
 	linkList = []   # vector de enlaces del grafo.
 
@@ -954,7 +954,7 @@ def computeMaxScore(a, b, maxScore):
 	if s > maxScore: return s
 	return maxScore\n
 """ + generateTypeCode(agm) + """
-def CheckTarget(graph):\n
+def CheckTarget(graph):
 	n2id = dict()                             # diccionario
 	available = copy.deepcopy(graph.nodes)    # lista de nodos del grafo inicial.
 """
@@ -1078,6 +1078,38 @@ def CheckTarget(graph):\n
 	if len(forHierarchicalRule)>0: indent+='\t'
 	ret += indent+"return maxScore, False"
 	ret += "\n"
+
+
+	# Generate code for getting the variables (we still need to take preconditions into account!)
+	if len(forHierarchicalRule)==0:
+		ret += """\n\ndef getTargetVariables():"""
+	else:
+		ret += indent[:-1]+'def ' + forHierarchicalRule + '_variables(self):'
+		indent += "\t"
+	types = set()
+	binary = set()
+	unary = set()
+	print 'forHierarchicalRule', forHierarchicalRule
+	for link_i in range(len(graph.links)):
+		link = graph.links[link_i]
+		if link.a in graph.nodes.keys():
+			aType = graph.nodes[link.a].sType
+		else:
+			aType = link.a#xgraph.nodes[link.a].sType
+		if link.b in graph.nodes.keys():
+			bType = graph.nodes[link.b].sType
+		else:
+			bType = link.b#xgraph.nodes[link.b].sType
+		if link.a == link.b:
+			unary.add((link.linkType, aType))
+		else:
+			binary.add((link.linkType, aType, bType))
+	for n in graph.nodes:
+		types.add(graph.nodes[n].sType)
+	ret += indent + 'types = ' + str(types)
+	ret += indent + 'binary = ' + str(binary)
+	ret += indent + 'unary = ' + str(unary)
+	ret += indent + 'return types, binary, unary'
 
 	return ret
 
@@ -1274,7 +1306,7 @@ def computeMaxScore(a, b, maxScore):
 	if s > maxScore: return s
 	return maxScore\n
 """ + generateTypeCode(agm) + """
-def CheckTarget(graph):\n
+def CheckTarget(graph):
 	n2id = dict()                             # diccionario
 	available = copy.deepcopy(graph.nodes)    # lista de nodos del grafo inicial.
 """
@@ -1406,6 +1438,29 @@ def CheckTarget(graph):\n
 	if len(forHierarchicalRule)>0: indent+='\t'
 	ret += indent+"return maxScore, False"
 	ret += "\n"
+
+
+	# Generate code for getting the variables (we still need to take preconditions into account!)
+	if len(forHierarchicalRule)==0:
+		ret += """\n\ndef getTargetVariables():"""
+	else:
+		ret += indent[:-1]+'def ' + forHierarchicalRule + '_variables(self):'
+		indent += "\t"
+	types = set()
+	binary = set()
+	unary = set()
+	for link_i in range(len(graph.links)):
+		link = graph.links[link_i]
+		if link.a == link.b:
+			unary.add((link.linkType, graph.nodes[link.a].sType))
+		else:
+			binary.add((link.linkType, graph.nodes[link.a].sType, graph.nodes[link.b].sType))
+	for n in graph.nodes:
+		types.add(graph.nodes[n].sType)
+	ret += indent + 'types = ' + str(types)
+	ret += indent + 'binary = ' + str(binary)
+	ret += indent + 'unary = ' + str(unary)
+	ret += indent + 'return types, binary, unary'
 
 	return ret
 

@@ -358,7 +358,7 @@ class AGGLPlanner2(object):
 	# @param resultFile is the optional name of the file where the plan result will be stored.
 	# @param decomposing: added whe we are decomposing a jerarchical rule
 	# @param awakenRules: the set of rules that are currently available for the planner to find a solution
-	def __init__(self, domainParsed, domainModule, initWorld, target, threshData, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
+	def __init__(self, domainParsed, domainModule, initWorld, targetTuple, threshData, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
 		object.__init__(self)
 		self.timeElapsed = 0.
 		self.symbol_mapping = copy.deepcopy(symbol_mapping)
@@ -366,6 +366,11 @@ class AGGLPlanner2(object):
 		self.excludeList = copy.deepcopy(excludeList)
 		self.indent = copy.deepcopy(indent)
 		self.resultFile = resultFile
+		target = targetTuple[0]
+		targetVariables_types, targetVariables_binary, targetVariables_unary = targetTuple[1]()
+		print 'HELLO LASHIT', targetVariables_types
+		print 'HELLO LASHIT', targetVariables_binary
+		print 'HELLO LASHIT', targetVariables_unary
 		if self.indent == None: self.indent = ''
 		# Get initial world mdoel
 		if isinstance(initWorld,unicode) or isinstance(initWorld,str):
@@ -562,15 +567,17 @@ class AGGLPlanner2(object):
 					estadoIntermedio = self.triggerMap[ac.name](self.initWorld, ac.parameters)
 					""" We remove the constants created by the hierarchical rule, making them variables."""
 					graph = setNewConstantsAsVariables(self.initWorld.graph, estadoIntermedio.graph)
-					outputText = generateTarget(self.domainParsed, graph)
+					outputText = generateTarget(self.domainParsed, graph)#, xgraph=estadoIntermedio.graph)
 					""" The following flag is set so the planning of the hierarchical rule is shown on screen"""
 					firstActionIsHierarchical = True
 					hierarchicalTarget = self.domainModule.getHierarchicalTargets()[ac.name]
-					aaa = AGGLPlanner2( # domainParsed, domainModule, initWorld, target, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
+					hierarchicalTargetVariables = getattr(self.domainModule, ac.name+'_variables')
+					aaa = AGGLPlanner2( #domainParsed, domainModule, initWorld, targetTuple, threshData, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
 					   self.domainParsed,
 					   self.domainModule,
 					   self.initWorld,
-					   hierarchicalTarget,
+					   (hierarchicalTarget, hierarchicalTargetVariables),
+					   threshData,
 					   self.indent+'\t',
 					   paramsWithoutNew,
 					   self.excludeList,
@@ -649,8 +656,10 @@ class AGGLPlanner2(object):
 		timeA = datetime.datetime.now()
 		# Size of operator chunk
 		chunkSize = [0.3, 0.7, 0.8, 1.0]
+		#hunkSize = [1.0]
 		# TimeSlots for chunks
 		chunkTime = [10., 0.05, 0.075, 0.05]
+		#chunkTime = [100.]
 		print chunkTime
 		# Chunk pointer
 		chunkNumber = -1
@@ -879,6 +888,7 @@ if __name__ == '__main__': # program domain problem result
 
 			domainRuleSet = imp.load_source('module__na_me', domainPath).RuleSet()
 			targetCode = imp.load_source('modeeeule__na_me', targetPath).CheckTarget
-			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, targetCode, threshData, '', dict(), [], resultFile)
+			targetVariablesCode = imp.load_source('modeeeule__na_me', targetPath).getTargetVariables
+			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, (targetCode, targetVariablesCode), threshData, '', dict(), [], resultFile)
 			p.run()
 		print 'Total time: ', (time.time()-t0).__str__()
