@@ -1089,7 +1089,7 @@ def CheckTarget(graph):
 	types = set()
 	binary = set()
 	unary = set()
-	print 'forHierarchicalRule', forHierarchicalRule
+
 	for link_i in range(len(graph.links)):
 		link = graph.links[link_i]
 		if link.a in graph.nodes.keys():
