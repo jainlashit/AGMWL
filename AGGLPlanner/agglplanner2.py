@@ -656,7 +656,7 @@ class AGGLPlanner2(object):
 		timeA = datetime.datetime.now()
 		# Size of operator chunk
 		chunkSize = [0.3, 0.7, 0.8, 1.0]
-		#hunkSize = [1.0]
+		#chunkSize = [1.0]
 		# TimeSlots for chunks
 		chunkTime = [10., 0.05, 0.075, 0.05]
 		#chunkTime = [100.]
