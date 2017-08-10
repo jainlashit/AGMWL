@@ -31,9 +31,9 @@
     @ingroup PyAPI
     This file loads the grammar, the initial state of the world and the GOAL status without changing the files extensions of the grammar and the goal.
 
-    Usage: agglplanner2 grammar.aggl init.xml target.py
+    Usage: agglplanner2 grammar.aggl init.xml target.py trainFile
 
-    Also, we can keep the results in a file with: agglplanner2 grammar.aggl init.xml target.py result.plan
+    Also, we can keep the results in a file with: agglplanner2 grammar.aggl init.xml target.py trainFile result.plan
 """
 
 import time
@@ -57,6 +57,7 @@ import xmlModelParser
 import agglplanchecker
 from agglplanchecker import *
 from agglplannerplan import *
+from generate import *
 
 # C O N F I G U R A T I O N
 number_of_threads = 0 #4
@@ -360,6 +361,16 @@ class AGGLPlanner2(object):
 	# @param awakenRules: the set of rules that are currently available for the planner to find a solution
 	def __init__(self, domainParsed, domainModule, initWorld, targetTuple, threshData, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
 		object.__init__(self)
+		#print 'domainParsed', type(domainParsed)
+		#print 'domainModule', type(domainModule)
+		#print 'initWorld', type(initWorld)
+		#print 'targetTuple', type(targetTuple)
+		#print 'threshData', type(threshData)
+		#print 'indent', type(indent)
+		#print 'symbol_mapping', type(symbol_mapping)
+		#print 'excludeList', type(excludeList)
+		#print 'decomposing', type(decomposing)
+		#print 'awakenRules', type(awakenRules)
 		self.timeElapsed = 0.
 		self.symbol_mapping = copy.deepcopy(symbol_mapping)
 		if excludeList == None: excludeList = []
@@ -368,9 +379,6 @@ class AGGLPlanner2(object):
 		self.resultFile = resultFile
 		target = targetTuple[0]
 		targetVariables_types, targetVariables_binary, targetVariables_unary = targetTuple[1]()
-		print 'HELLO LASHIT', targetVariables_types
-		print 'HELLO LASHIT', targetVariables_binary
-		print 'HELLO LASHIT', targetVariables_unary
 		if self.indent == None: self.indent = ''
 		# Get initial world mdoel
 		if isinstance(initWorld,unicode) or isinstance(initWorld,str):
@@ -409,6 +417,24 @@ class AGGLPlanner2(object):
 
 		# set stop flat
 		self.externalStopFlag = LockableInteger(0)
+
+
+		self.threshData = self.ruleMap.keys()
+		# LASHIT: Here you have to compute self.threshData given the data we are given now. Instead of using 'targetFile' as you did until
+		# now you need to compute it using 'targetVariables_types', 'targetVariables_binary', 'targetVariables_unary'. I think it should
+		# actualy quite easy. Right now, to be able to perform tests I just included all actions in 'self.threshData' (the line above this
+		# comment, remove the line when you are done).
+		# I think that what you should modify is the "Generate" class. See the modification that I made to the "get_distrb" call a few lines
+		# below.
+		print 'HELLO LASHIT', targetVariables_types
+		print 'HELLO LASHIT', targetVariables_binary
+		print 'HELLO LASHIT', targetVariables_unary
+		#self.trainFile = trainFile
+		#self.targetFile = targetFile
+		## Getting Action Preference data
+		#g = Generate()
+		# Sorting actions by relevance
+		#self.threshData = sorted(g.get_distrb(worldFile, (targetVariables_types, targetVariables_binary, targetVariables_unary), trainFile))
 
 	def setStopFlag(self):
 		print 'got setStopFlag (internal class)'
@@ -467,6 +493,7 @@ class AGGLPlanner2(object):
 				lock.acquire()
 				threadStatus.append(True)
 				self.thread_locks.append(lock)
+				#                        def startThreadedWork( ruleMap,                 triggerMap,                     lock=None, i=0, threadPoolStatus=None):
 				thread.start_new_thread(self.startThreadedWork, (copy.deepcopy(ruleMap), copy.deepcopy(self.triggerMap), lock, i, threadStatus))
 			# Wait for the threads to stop
 			for lock in self.thread_locks:
@@ -655,11 +682,11 @@ class AGGLPlanner2(object):
 		# We take the initial time.
 		timeA = datetime.datetime.now()
 		# Size of operator chunk
-		chunkSize = [0.3, 0.7, 0.8, 1.0]
-		#chunkSize = [1.0]
+		#chunkSize = [0.3, 0.7, 0.8, 1.0]
+		chunkSize = [1.0]
 		# TimeSlots for chunks
-		chunkTime = [10., 0.05, 0.075, 0.05]
-		#chunkTime = [100.]
+		#chunkTime = [10., 0.05, 0.075, 0.05]
+		chunkTime = [100.]
 		print chunkTime
 		# Chunk pointer
 		chunkNumber = -1
@@ -873,13 +900,13 @@ if __name__ == '__main__': # program domain problem result
 		t0 = time.time()
 
 		if len(sys.argv)<6:
-			print 'Usage\n\t', sys.argv[0], ' domain.aggl activeRules.py init.xml target.xml.py [result.plan] [input_hierarchical.plan]'
+			print 'Usage\n\t', sys.argv[0], ' domainFile.aggl activeRules.py init.xml target.xml.py trainFile [result.plan] [input_hierarchical.plan]'
 
 		else:
 			domainAGM = AGMFileDataParsing.fromFile(sys.argv[1]) #From domain.aggl
-			domainPath = sys.argv[2] # Get the activeRules.py path
-			initPath = sys.argv[3]       # Get the inital model or world.
-			targetPath = sys.argv[4] # Get the target model or world.
+			domainPath = sys.argv[2]                            # ActiveRules.py path
+			initPath =   sys.argv[3]                            # Inital model or world.
+			targetPath = sys.argv[4]                            # Target model or world.
 			threshData = sorted(pickle.load(open(sys.argv[5]))) # Sorting actions by relevance
 			resultFile = None
 			if len(sys.argv)>=7: resultFile = open(sys.argv[6], 'w')
@@ -889,6 +916,7 @@ if __name__ == '__main__': # program domain problem result
 			domainRuleSet = imp.load_source('module__na_me', domainPath).RuleSet()
 			targetCode = imp.load_source('modeeeule__na_me', targetPath).CheckTarget
 			targetVariablesCode = imp.load_source('modeeeule__na_me', targetPath).getTargetVariables
-			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, (targetCode, targetVariablesCode), threshData, '', dict(), [], resultFile)
+			#                domainParsed domainModule initWorld targetTuple,                       threshData indent symbol_mapping excludeList, resultFile, decomposing, awakenRules):
+			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, (targetCode, targetVariablesCode), threshData, '',    dict(),        [],         resultFile)
 			p.run()
 		print 'Total time: ', (time.time()-t0).__str__()

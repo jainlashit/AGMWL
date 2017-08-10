@@ -37,7 +37,7 @@ class Generate:
 		return prb_distrb
 
 
-	def get_distrb(self, init_file, target_file, train_file, prb_file):
+	def get_distrb(self, init_file, target_file, train_file):
 		'''
 		For singleton testing pass pickled data from train.py . "python fileName initModel.xml target.aggt learning_file"
 		'''
@@ -51,20 +51,17 @@ class Generate:
 		self.parser.parse_target(target_file)
 		# train_file contains relevant trained data (pickled)
 		self.classifier.prefetch(*self.fetch(train_file))
-		
-		f = open(prb_file, "w")
-		pickle.dump(self.normalize(self.classifier.predict(self.parser.attr_link + self.parser.attr_node)), f)
-		f.close()
+		self.prb_distrb = self.normalize(self.classifier.predict(self.parser.attr_link + self.parser.attr_node))
 
-
+		return self.prb_distrb
 
 if __name__ == '__main__':
 
 	g = Generate()
 
-	if len(sys.argv) == 5:
-		g.get_distrb(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+	if len(sys.argv) == 4:
+		g.get_distrb(sys.argv[1], sys.argv[2], sys.argv[3])
 
 	else:
 		print("ERROR: Arguments missing")
-		print("To generate valid prb file : `$python generate_prb.py initModel.xml target.aggt learning_file prb_file.prb`")
+		print("To generate valid prb file : `$python generate_prb.py initModel.xml target.aggt learning_file`")
