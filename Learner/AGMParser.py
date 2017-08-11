@@ -80,9 +80,6 @@ class Parser:
 		self.typeMap = {}
 		self.relMap = {}
 
-		'''
-		This is a comment
-		'''
 		tree = ET.parse(fileName)
 		root = tree.getroot()
 		for child in root:
