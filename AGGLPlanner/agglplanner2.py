@@ -359,7 +359,7 @@ class AGGLPlanner2(object):
 	# @param resultFile is the optional name of the file where the plan result will be stored.
 	# @param decomposing: added whe we are decomposing a jerarchical rule
 	# @param awakenRules: the set of rules that are currently available for the planner to find a solution
-	def __init__(self, domainParsed, domainModule, initWorld, targetTuple, threshData, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
+	def __init__(self, domainParsed, domainModule, initWorld, targetTuple, trainFile, indent=None, symbol_mapping=None, excludeList=None, resultFile=None, decomposing=False, awakenRules=set()):
 		object.__init__(self)
 		#print 'domainParsed', type(domainParsed)
 		#print 'domainModule', type(domainModule)
@@ -371,6 +371,7 @@ class AGGLPlanner2(object):
 		#print 'excludeList', type(excludeList)
 		#print 'decomposing', type(decomposing)
 		#print 'awakenRules', type(awakenRules)
+		print(initWorld)
 		self.timeElapsed = 0.
 		self.symbol_mapping = copy.deepcopy(symbol_mapping)
 		if excludeList == None: excludeList = []
@@ -394,7 +395,6 @@ class AGGLPlanner2(object):
 			print type(initWorld)
 			os._exit(1)
 		self.initWorld.nodeId = 0
-		self.threshData = threshData
 		# Set rule and trigger maps
 		self.domainParsed = domainParsed
 		self.domainModule = domainModule
@@ -419,7 +419,7 @@ class AGGLPlanner2(object):
 		self.externalStopFlag = LockableInteger(0)
 
 
-		self.threshData = self.ruleMap.keys()
+		# self.threshData = self.ruleMap.keys()
 		# LASHIT: Here you have to compute self.threshData given the data we are given now. Instead of using 'targetFile' as you did until
 		# now you need to compute it using 'targetVariables_types', 'targetVariables_binary', 'targetVariables_unary'. I think it should
 		# actualy quite easy. Right now, to be able to perform tests I just included all actions in 'self.threshData' (the line above this
@@ -429,12 +429,11 @@ class AGGLPlanner2(object):
 		print 'HELLO LASHIT', targetVariables_types
 		print 'HELLO LASHIT', targetVariables_binary
 		print 'HELLO LASHIT', targetVariables_unary
-		#self.trainFile = trainFile
-		#self.targetFile = targetFile
-		## Getting Action Preference data
-		#g = Generate()
+		self.trainFile = trainFile
+		# Getting Action Preference data
+		g = Generate()
 		# Sorting actions by relevance
-		#self.threshData = sorted(g.get_distrb(worldFile, (targetVariables_types, targetVariables_binary, targetVariables_unary), trainFile))
+		self.threshData = sorted(g.get_distrb(initWorld, None, targetVariables_types, targetVariables_binary, targetVariables_unary, self.trainFile))
 
 	def setStopFlag(self):
 		print 'got setStopFlag (internal class)'
@@ -604,7 +603,7 @@ class AGGLPlanner2(object):
 					   self.domainModule,
 					   self.initWorld,
 					   (hierarchicalTarget, hierarchicalTargetVariables),
-					   threshData,
+					   self.trainFile,
 					   self.indent+'\t',
 					   paramsWithoutNew,
 					   self.excludeList,
@@ -907,7 +906,7 @@ if __name__ == '__main__': # program domain problem result
 			domainPath = sys.argv[2]                            # ActiveRules.py path
 			initPath =   sys.argv[3]                            # Inital model or world.
 			targetPath = sys.argv[4]                            # Target model or world.
-			threshData = sorted(pickle.load(open(sys.argv[5]))) # Sorting actions by relevance
+			trainFile = sys.argv[5] # Sorting actions by relevance
 			resultFile = None
 			if len(sys.argv)>=7: resultFile = open(sys.argv[6], 'w')
 			hierarchicalInputPlan = None
@@ -917,6 +916,6 @@ if __name__ == '__main__': # program domain problem result
 			targetCode = imp.load_source('modeeeule__na_me', targetPath).CheckTarget
 			targetVariablesCode = imp.load_source('modeeeule__na_me', targetPath).getTargetVariables
 			#                domainParsed domainModule initWorld targetTuple,                       threshData indent symbol_mapping excludeList, resultFile, decomposing, awakenRules):
-			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, (targetCode, targetVariablesCode), threshData, '',    dict(),        [],         resultFile)
+			p = AGGLPlanner2(domainAGM, domainRuleSet, initPath, (targetCode, targetVariablesCode), trainFile, '',    dict(),        [],         resultFile)
 			p.run()
 		print 'Total time: ', (time.time()-t0).__str__()
