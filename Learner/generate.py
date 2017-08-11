@@ -37,7 +37,7 @@ class Generate:
 		return prb_distrb
 
 
-	def get_distrb(self, init_file, target_file, train_file):
+	def get_distrb(self, init_file, target_file, targetVariables_types, targetVariables_binary, targetVariables_unary, train_file):
 		'''
 		For singleton testing pass pickled data from train.py . "python fileName initModel.xml target.aggt learning_file"
 		'''
@@ -48,12 +48,31 @@ class Generate:
 		# .xml file
 		self.parser.parse_initM(init_file)
 		# .aggt file
-		self.parser.parse_target(target_file)
+		if target_file != None:
+			self.parser.parse_target(target_file)
+		else:
+			print(targetVariables_types, targetVariables_binary, targetVariables_unary)
+			
+			for typeName in list(targetVariables_types):
+				self.parser.attr_node.append((typeName, typeName))
+
+			for var in list(targetVariables_binary):
+				rel = var[0]
+				type1 = var[1]
+				type2 = var[2]
+				self.parser.attr_link.append((type1, rel, type2))
+				for id_pair in self.parser.relMap:
+					if type1 == self.parser.typeMap[id_pair[0]] and type2 == self.parser.typeMap[id_pair[1]]:
+						for relation in self.parser.relMap[id_pair]:
+							self.parser.attr_link.append((type1, relation, type2))
+							self.parser.attr_link.append((type1, relation, rel, type2))
+
 		# train_file contains relevant trained data (pickled)
 		self.classifier.prefetch(*self.fetch(train_file))
 		self.prb_distrb = self.normalize(self.classifier.predict(self.parser.attr_link + self.parser.attr_node))
 
 		return self.prb_distrb
+
 
 if __name__ == '__main__':
 

@@ -1,3 +1,9 @@
+'''
+Parses domain.aggl, WorldModel.aggl, Target.aggt, results.plan file for Learning Data  
+'''
+
+
+
 import xml.etree.ElementTree as ET
 
 
@@ -23,7 +29,11 @@ class Parser:
 
 	def parse_domain(self, fileName):
 		'''
-		A parser function for files with .aggl extension
+		A parser for Domain Files (.aggl extension)
+		This reads domain file and gathers knowledge about two variables:
+		i) self.action_list contains is a list of names of action
+		ii) self.action_info contains all description of an action (as in domain.aggl). 
+			This is used if a reduced (limited actions) domain file needs to be generated.  
 		'''
 		f = open(fileName)
 		parse_flag = False
@@ -59,12 +69,20 @@ class Parser:
 
 	def parse_initM(self, fileName):
 		'''
-		Parse xml file (initial world model)
+		Parse initial world model (.xml extension)
+		
+		This functions fills-in following variables:
+		i) typeMap : Maps id's to type
+		ii) relMap : Contains relations between two id's
 		'''
+		
 		# Re-initializing variables necessary while training and testing 
 		self.typeMap = {}
 		self.relMap = {}
 
+		'''
+		This is a comment
+		'''
 		tree = ET.parse(fileName)
 		root = tree.getroot()
 		for child in root:
@@ -81,7 +99,8 @@ class Parser:
 	
 	def parse_plan(self, fileName):
 		'''
-		A parser function for files with .plan extension
+		Parses result file (.plan extension)
+		Fills in self.tgt_actions which contains all the actions involved in the plan.
 		'''
 		self.tgt_actions = []
 		f = open(fileName)
@@ -97,7 +116,7 @@ class Parser:
 
 	def parse_target(self, fileName):
 		'''
-		Parse files with .aggt extension, target files (with respect to planner not classifier)
+		Parses target files (.aggt extension)
 		'''
 		self.attr_node = []
 		self.attr_link = []
