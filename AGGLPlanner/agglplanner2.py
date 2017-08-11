@@ -420,15 +420,9 @@ class AGGLPlanner2(object):
 
 
 		# self.threshData = self.ruleMap.keys()
-		# LASHIT: Here you have to compute self.threshData given the data we are given now. Instead of using 'targetFile' as you did until
-		# now you need to compute it using 'targetVariables_types', 'targetVariables_binary', 'targetVariables_unary'. I think it should
-		# actualy quite easy. Right now, to be able to perform tests I just included all actions in 'self.threshData' (the line above this
-		# comment, remove the line when you are done).
-		# I think that what you should modify is the "Generate" class. See the modification that I made to the "get_distrb" call a few lines
-		# below.
-		print 'HELLO LASHIT', targetVariables_types
-		print 'HELLO LASHIT', targetVariables_binary
-		print 'HELLO LASHIT', targetVariables_unary
+		# print targetVariables_types
+		# print targetVariables_binary
+		# print targetVariables_unary
 		self.trainFile = trainFile
 		# Getting Action Preference data
 		g = Generate()
