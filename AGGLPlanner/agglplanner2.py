@@ -65,7 +65,7 @@ maxWorldIncrement = 5
 maxCost = 2000000000000
 stopWithFirstPlan = False
 verbose = 1
-maxTimeWaitAchieved = 5.
+maxTimeWaitAchieved = 1.5
 maxTimeWaitLimit = 2500.
 
 
@@ -307,11 +307,6 @@ class LockableInteger(object):
 
 
 
-
-
-
-
-
 class DomainInformation(object):
 	def __init__(self, identifier, text):
 		self.identifier = identifier
@@ -379,7 +374,7 @@ class AGGLPlanner2(object):
 		self.indent = copy.deepcopy(indent)
 		self.resultFile = resultFile
 		target = targetTuple[0]
-		targetVariables_types, targetVariables_binary, targetVariables_unary = targetTuple[1]()
+		self.targetVariables_types, self.targetVariables_binary, self.targetVariables_unary = targetTuple[1]()
 		if self.indent == None: self.indent = ''
 		# Get initial world mdoel
 		if isinstance(initWorld,unicode) or isinstance(initWorld,str):
@@ -419,16 +414,6 @@ class AGGLPlanner2(object):
 		self.externalStopFlag = LockableInteger(0)
 
 
-		# self.threshData = self.ruleMap.keys()
-		# print targetVariables_types
-		# print targetVariables_binary
-		# print targetVariables_unary
-		self.trainFile = trainFile
-		# Getting Action Preference data
-		g = Generate()
-		# Sorting actions by relevance
-		self.threshData = sorted(g.get_distrb(initWorld, None, targetVariables_types, targetVariables_binary, targetVariables_unary, self.trainFile))
-
 	def setStopFlag(self):
 		print 'got setStopFlag (internal class)'
 		self.externalStopFlag.set(1)
@@ -460,9 +445,30 @@ class AGGLPlanner2(object):
 
 		# Create initial state
 		if self.symbol_mapping:
-			self.initWorld.score, achieved = self.targetCode(self.initWorld.graph, self.symbol_mapping)
+			self.initWorld.score, achieved, variables_achieved = self.targetCode(self.initWorld.graph, self.symbol_mapping)
 		else:
-			self.initWorld.score, achieved = self.targetCode(self.initWorld.graph)
+			self.initWorld.score, achieved, variables_achieved = self.targetCode(self.initWorld.graph)
+
+
+		print 'TARGET VARIABLES'
+		print self.targetVariables_types
+ 		print self.targetVariables_binary
+		print self.targetVariables_unary
+		types_achieved  = variables_achieved[0] & self.targetVariables_types
+		binary_achieved = variables_achieved[1] & self.targetVariables_binary
+		unary_achieved  = variables_achieved[2] & self.targetVariables_unary
+		print 'ACHIEVED VARIABLES'
+		print types_achieved
+		print binary_achieved
+		print unary_achieved
+		self.trainFile = trainFile
+		# Getting Action Preference data
+		g = Generate()
+		# Sorting actions by relevance
+		self.threshData = g.get_distrb(self.targetVariables_types, self.targetVariables_binary, self.targetVariables_unary, self.trainFile)
+		print self.threshData
+		self.threshData = sorted(self.threshData)
+
 
 		if achieved:
 			# If the goal is achieved, we save the solution in the result list, the
@@ -675,11 +681,11 @@ class AGGLPlanner2(object):
 		# We take the initial time.
 		timeA = datetime.datetime.now()
 		# Size of operator chunk
-		#chunkSize = [0.3, 0.7, 0.8, 1.0]
-		chunkSize = [1.0]
+		chunkSize = [0.3, 0.7, 0.8, 1.0]
+		# chunkSize = [1.0]
 		# TimeSlots for chunks
-		#chunkTime = [10., 0.05, 0.075, 0.05]
-		chunkTime = [100.]
+		chunkTime = [10., 0.05, 0.075, 0.05]
+		# chunkTime = [100.]
 		print chunkTime
 		# Chunk pointer
 		chunkNumber = -1
@@ -800,9 +806,9 @@ class AGGLPlanner2(object):
 							for deriv in ruleMap[k](head):
 								self.explored.increase()
 								if self.symbol_mapping:
-									deriv.score, achieved = self.targetCode(deriv.graph, self.symbol_mapping)
+									deriv.score, achieved, variables_achieved = self.targetCode(deriv.graph, self.symbol_mapping)
 								else:
-									deriv.score, achieved = self.targetCode(deriv.graph)
+									deriv.score, achieved, variables_achieved = self.targetCode(deriv.graph)
 								if achieved:
 									self.results.append(deriv)
 									if stopWithFirstPlan:

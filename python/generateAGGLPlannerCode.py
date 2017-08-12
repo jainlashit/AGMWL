@@ -188,7 +188,12 @@ def newLinkScore(linkList, newSymbol, alreadyThere):
 			else: negated = ''
 			# Condition itself
 			if ((newSymbol == link.a) and (link.b in alreadyThere)) or ((newSymbol == link.b) and (link.a in alreadyThere)):
-				ret.append('if [n2id["'+str(link.a)+'"],n2id["'+str(link.b)+'"],"'+str(link.linkType)+'"] ' + negated + ' in graph.links: linksVal += 100')
+				ret.append('if [n2id["'+str(link.a)+'"],n2id["'+str(link.b)+'"],"'+str(link.linkType)+'"] ' + negated + ' in graph.links:')
+				ret.append('\tlinksVal += 100')
+				if link.a != link.b:
+					ret.append('\tbinary.add(("'+link.linkType+'", graph.nodes[n2id["'+link.a+'"]].sType, graph.nodes[n2id["'+link.b+'"]].sType))')
+				else:
+					ret.append('\tunary.add(("'+link.linkType+'", graph.nodes[n2id["'+link.a+'"]].sType))')
 	return ret
 
 
@@ -961,7 +966,6 @@ def CheckTarget(graph):
 	else:
 		ret += indent+'def ' + forHierarchicalRule + '_target(self, graph, smapping=dict()): # vm'
 		indent += "\t"
-		#ret += indent + 'print "' + forHierarchicalRule + '_target"\n'
 		ret += indent+"n2id = copy.deepcopy(smapping)\n"
 		ret += indent+"available = copy.deepcopy(graph.nodes)"
 
@@ -1292,6 +1296,7 @@ def componerSubgrafos(grafo, ramasGrafo, constantes):
 
 def generateTarget_AGGT(agm, target, forHierarchicalRule='', lgraph=None, verbose=False):
 	graph = target['graph']
+
 	linkList = []   # vector de enlaces del grafo.
 	constantes, listaNodos = encontrarOrden(graph, lgraph, verbose)
 	ret = ''
@@ -1315,6 +1320,12 @@ def CheckTarget(graph):
 		indent += "\t"
 		ret += indent+"n2id = copy.deepcopy(smapping)\n"
 		ret += indent+"available = copy.deepcopy(graph.nodes)"
+
+	### <<<
+	ret += indent+'types = set()'
+	ret += indent+'binary = set()'
+	ret += indent+'unary = set()'
+	### >>>
 
 	ret += indent+"maxScore = 0"
 	ret += indent+"totalScore = " + str(calcularTotalScore(graph)) + '\n'
@@ -1407,6 +1418,7 @@ def CheckTarget(graph):
 		indent += "\t"
 		score += scorePerContition
 		ret += indent + "scoreNodes.append(100)"
+		ret += indent + 'types.add("'+graph.nodes[n_n].sType+'")'
 		pops.append(indent+'scoreNodes.pop()')
 		ret += indent + "maxScore = computeMaxScore(scoreNodes, scoreLinks, maxScore)"
 
@@ -1426,17 +1438,17 @@ def CheckTarget(graph):
 		preconditionCode, totalCond = generateTargetPreconditionCode(target['precondition'], realCond, indent+'\t')
 		#print totalCond
 		ret += preconditionCode
-		ret += indent+"\t\t\treturn maxScore, True # there were preconditions and were met"
+		ret += indent+"\t\t\treturn maxScore, True, copy.deepcopy((types, binary, unary)) # there were preconditions and were met"
 	else:
 		ret += indent+"if maxScore == " + str(score + totalCond*scorePerContition) + ": # there are no preconditions"
-		ret += indent+"\treturn maxScore, True"
+		ret += indent+"\treturn maxScore, True, copy.deepcopy((types, binary, unary))"
 
 	# Rule ending
 	while len(pops)>0:
 		ret += pops.pop()
 	indent = "\n\t"
 	if len(forHierarchicalRule)>0: indent+='\t'
-	ret += indent+"return maxScore, False"
+	ret += indent+"return maxScore, False, copy.deepcopy((types, binary, unary))"
 	ret += "\n"
 
 
