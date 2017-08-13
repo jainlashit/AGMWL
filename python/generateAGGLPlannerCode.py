@@ -971,6 +971,9 @@ def CheckTarget(graph):
 
 	ret += indent+"maxScore = 0"
 	ret += indent+"totalScore = " + str(calcularTotalScore(graph)) + '\n'
+	ret += indent+"binary = set([])"
+	ret += indent+"types = set([])"
+	ret += indent+"unary = set([])"
 
 	# Sacamos los enlaces y los transformamos de AGMLink a tuplas de string [origen, enlace, destino]
 	# y los ordenamos de menor a mayor con el metodo sorted
