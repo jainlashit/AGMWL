@@ -470,9 +470,9 @@ class AGGLPlanner(object):
 
 		# Create initial state
 		if self.symbol_mapping:
-			self.initWorld.score, achieved = self.targetCode(self.initWorld.graph, self.symbol_mapping)
+			self.initWorld.score, achieved, unused = self.targetCode(self.initWorld.graph, self.symbol_mapping)
 		else:
-			self.initWorld.score, achieved = self.targetCode(self.initWorld.graph)
+			self.initWorld.score, achieved, unused = self.targetCode(self.initWorld.graph)
 
 		if achieved:
 			# If the goal is achieved, we save the solution in the result list, the
@@ -764,9 +764,9 @@ class AGGLPlanner(object):
 					self.explored.increase() # Add 1 to the number of explored nodes (used just for providing the information to the user)
 					# Compute the heuristic (score) and whether or not the goal is met
 					if self.symbol_mapping:
-						deriv.score, achieved = self.targetCode(deriv.graph, self.symbol_mapping)
+						deriv.score, achieved, unused = self.targetCode(deriv.graph, self.symbol_mapping)
 					else:
-						deriv.score, achieved = self.targetCode(deriv.graph)
+						deriv.score, achieved, unused = self.targetCode(deriv.graph)
 					# If the goal is achieved after executing the action we append the new node in the list of nodes that achieve the mission
 					if achieved:
 						self.results.append(deriv)

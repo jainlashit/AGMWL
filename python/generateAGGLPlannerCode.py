@@ -1073,14 +1073,14 @@ def CheckTarget(graph):
 			realCond += 1
 			#ret += indent+"if " + cond + ": scoreNodes += "+str(scorePerContition)+""
 	ret += indent+"if maxScore == " + str(score + realCond*scorePerContition) + ":"
-	ret += indent+"\treturn maxScore, True"
+	ret += indent+"\treturn maxScore, True, None"
 
 	# Rule ending
 	while len(pops)>0:
 		ret += pops.pop()
 	indent = "\n\t"
 	if len(forHierarchicalRule)>0: indent+='\t'
-	ret += indent+"return maxScore, False"
+	ret += indent+"return maxScore, False, None"
 	ret += "\n"
 
 
