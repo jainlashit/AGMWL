@@ -53,20 +53,19 @@ class Classifier:
 			f.write(str(key) + ":" + str(self.attr_count[key]) + "\n")
 		f.close()
 
-	def prefetch(self, total_count, action_count, attr_count, attr_all, action_list, action_info):
+	def prefetch(self, total_count, action_count, attr_count, attr_all, action_list):
 		# In case data is already trained
 		self.total_count = total_count
 		self.action_count = action_count
 		self.attr_count = attr_count
 		self.attr_all = attr_all
 		self.action_list = action_list
-		self.action_info = action_info
 
 
-	def store(self, action_info):
+	def store(self):
 		# stores data for further training purpose
 		f = open("store.data", "wb")
-		pickle.dump((self.total_count, self.action_count, self.attr_count, self.attr_all, self.action_list, action_info), f)
+		pickle.dump((self.total_count, self.action_count, self.attr_count, self.attr_all, self.action_list), f)
 		f.close()
 		
 	def predict(self, attr_list):

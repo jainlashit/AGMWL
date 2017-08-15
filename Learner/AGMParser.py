@@ -24,21 +24,15 @@ class Parser:
 		self.attr_node = []
 		# what relations would exist between pair of id's as per target's (planner's context) requirement
 		self.attr_link = []
-		# Tells about the parameters involved with different action (used for dynamically producing action files)
-		self.action_info = {}
 
 	def parse_domain(self, fileName):
 		'''
 		A parser for Domain Files (.aggl extension)
-		This reads domain file and gathers knowledge about two variables:
-		i) self.action_list contains is a list of names of action
-		ii) self.action_info contains all description of an action (as in domain.aggl). 
-			This is used if a reduced (limited actions) domain file needs to be generated.  
+		This reads domain file and gathers knowledge about action_list which contains all possible actions:
 		'''
 		f = open(fileName)
 		parse_flag = False
 		count = 0
-		curr_action = None
 		'''Since actions are out of all nested loops, 
 		therefore count=0 indicates to get ready to read an action name. 
 		'''
@@ -56,15 +50,9 @@ class Parser:
 					count -= 1
 				elif count == 0 and line.strip() != "":
 					if "hierarchical" in line:
-						curr_action = line.split()[1]
 						self.action_list.append(line.split()[1])
 					else:
-						curr_action = line.split()[0]
 						self.action_list.append(line.split()[0])
-					self.action_info[curr_action] = ''
-				if curr_action != None:
-					self.action_info[curr_action] += line
-		
 		f.close()
 		return self.action_list
 
@@ -207,14 +195,3 @@ class Parser:
 										self.attr_link.append((type1, relation, rel, type2))
 
 		f.close()
-
-# if __name__ == '__main__':
-# 	p = Parser()
-# 	# main_path = "/home/lashit/AGM/GSoC/src/post/test/"
-# 	# test_file = "008_targetReachNoodles"
-# 	# p.parse_domain(main_path + "domain.aggl")
-# 	# p.parse_plan(main_path + test_file + ".aggt.plan")
-# 	# p.parse_initM(main_path + "00001.xml")
-# 	# p.parse_target(main_path + test_file + ".aggt")
-# 	# print(p.tgt_actions)
-# 	# print(p.action_list)

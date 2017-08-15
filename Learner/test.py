@@ -27,7 +27,6 @@ class Test:
 		for action in prb_distrb:
 			prb_distrb[action] = prb_distrb[action]/total
 		
-		# Not necessary to sort but doing it for other methods like new_domain
 		prb_distrb = sorted(prb_distrb, key=prb_distrb.get, reverse=True)
 		
 		return prb_distrb
@@ -60,26 +59,7 @@ class Test:
 			count = int(count/10)
 		return ''.join(str(digit) for digit in reversed(numero))
 
-	def new_domain(self, fraction, fileName, mode=True):
-		'''
-			mode = True => fraction will be taken as action count threshold
-			mode = False => fraction will be taken as probability threshold
-		'''
-		if mode:
-			toInclude = [action for action in self.prb_distrb[0:int(fraction*len(self.prb_distrb))]]
-		else:
-			toInclude = [action for action in self.prb_distrb if self.prb_distrb[action] >= fraction]
-
-		if len(toInclude) == 0:
-			print('empty domain', fileName)
-			raise EmptyDomain('empty domain '+ fileName)
-		f = open(fileName, 'w')
-		# print(self.prb_distrb)
-		f.write(AGMConst().visualParams)
-		for action in toInclude:
-			f.write(self.classifier.action_info[action])
-		f.close()
-
+	
 
 	def batch_input(self, data_path, start_dir, end_dir):
 		self.data_path = data_path
@@ -149,29 +129,3 @@ class Test:
 		except ZeroDivisionError:
 			pass
 			
-
-
-if __name__ == '__main__':
-
-	t = Test()
-	'''
-	Pass pickled data for batch testing. "python fileName learning_file"
-	For singleton testing "python fileName initModel.xml target.aggt learning_file"
-	'''
-
-	if len(sys.argv) == 4:
-		t.mono_test(sys.argv[1], sys.argv[2], sys.argv[3])
-		for th in [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]:
-			t.new_domain(th, "filtered_"+str(int(th*100)).zfill(10)+".aggl")
-	elif len(sys.argv) == 2:
-		data_path = "../../tests/"
-		start_dir = 541
-		end_dir = 541
-		t.batch_input(data_path, start_dir, end_dir)
-		dirs = range(start_dir, end_dir + 1)
-		t.batch_test(sys.argv[1])
-
-	else:
-		print("ERROR: Arguments missing")
-		print("For Batch training syntax    : `$python test.py learning_file`")
-		print("For Training single instance : `$python test.py initModel.xml target.aggt learning_file`")

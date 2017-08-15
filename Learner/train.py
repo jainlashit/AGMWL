@@ -45,4 +45,4 @@ for i in dirs:
 						# traceback.print_exc()
 						pass
 	print("At dir : ", i)
-c.store(p.action_info)
+c.store()
