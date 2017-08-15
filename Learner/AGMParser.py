@@ -66,6 +66,7 @@ class Parser:
 					self.action_info[curr_action] += line
 		
 		f.close()
+		return self.action_list
 
 	def parse_initM(self, fileName):
 		'''
