@@ -1,10 +1,13 @@
 '''
 Parses domain.aggl, WorldModel.aggl, Target.aggt, results.plan file for Learning Data  
 '''
-
-
-
+import sys
 import xml.etree.ElementTree as ET
+sys.path.append("/usr/local/share/agm")
+# import native AGGL Parser to Wrapper
+from parseAGGL import AGMFileDataParsing 
+# import native XML Parse to Wrapper
+from xmlModelParser import *
 
 
 class Parser:
@@ -30,31 +33,34 @@ class Parser:
 		A parser for Domain Files (.aggl extension)
 		This reads domain file and gathers knowledge about action_list which contains all possible actions:
 		'''
-		f = open(fileName)
-		parse_flag = False
-		count = 0
-		'''Since actions are out of all nested loops, 
-		therefore count=0 indicates to get ready to read an action name. 
-		'''
-		for line in f:
-			if "===" in line and not parse_flag:
-				''' Ignore visual editor stuff, parsing starts after we encounter
-				=== delimiter. 
-				'''
-				parse_flag = True
-			elif parse_flag:
-				# Assumption : { } and action name are not present on the same line
-				if "{" in line:
-					count += 1
-				elif "}" in line:
-					count -= 1
-				elif count == 0 and line.strip() != "":
-					if "hierarchical" in line:
-						self.action_list.append(line.split()[1])
-					else:
-						self.action_list.append(line.split()[0])
-		f.close()
-		return self.action_list
+		agmData = AGMFileDataParsing.fromFile(fileName)
+		for rule in agmData.agm.rules:
+			self.action_list.append(rule.name)
+		# f = open(fileName)
+		# parse_flag = False
+		# count = 0
+		# '''Since actions are out of all nested loops, 
+		# therefore count=0 indicates to get ready to read an action name. 
+		# '''
+		# for line in f:
+		# 	if "===" in line and not parse_flag:
+		# 		''' Ignore visual editor stuff, parsing starts after we encounter
+		# 		=== delimiter. 
+		# 		'''
+		# 		parse_flag = True
+		# 	elif parse_flag:
+		# 		# Assumption : { } and action name are not present on the same line
+		# 		if "{" in line:
+		# 			count += 1
+		# 		elif "}" in line:
+		# 			count -= 1
+		# 		elif count == 0 and line.strip() != "":
+		# 			if "hierarchical" in line:
+		# 				self.action_list.append(line.split()[1])
+		# 			else:
+		# 				self.action_list.append(line.split()[0])
+		# f.close()
+		# return self.action_list
 
 	def parse_initM(self, fileName):
 		'''
