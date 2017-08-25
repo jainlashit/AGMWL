@@ -28,7 +28,6 @@ class Test:
 			prb_distrb[action] = prb_distrb[action]/total
 		
 		prb_distrb = sorted(prb_distrb, key=prb_distrb.get, reverse=True)
-		
 		return prb_distrb
 
 	def get_accuracy(self, plan_file):
@@ -82,6 +81,10 @@ class Test:
 		# train_file contains relevant trained data (pickled)
 		self.classifier.prefetch(*self.fetch(train_file))
 		self.prb_distrb = self.normalize(self.classifier.predict(self.parser.attr_link + self.parser.attr_node))
+		#
+		# print self.classifier.total_count
+		#
+		return self.prb_distrb
 
 	def batch_test(self, train_file):
 

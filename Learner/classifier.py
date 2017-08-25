@@ -61,6 +61,18 @@ class Classifier:
 		self.attr_all = attr_all
 		self.action_list = action_list
 
+	def make_square(self):
+
+		square_matrix = {}
+		for action in self.action_list:
+			square_matrix[action] = {}
+			for attr in self.attr_all:
+				if attr in self.attr_count[action]:
+					square_matrix[action][attr] = self.attr_count[action][attr]
+				else:
+					square_matrix[action][attr] = 0
+					
+		self.attr_count = square_matrix
 
 	def store(self):
 		# stores data for further training purpose

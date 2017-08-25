@@ -1,6 +1,7 @@
+from __future__ import division
 import sys
 
-class naiveBayesInputValidator():
+class NaiveBayesInputValidator():
 
 	def __init__(self, target_list, attr_freq):
 
@@ -18,25 +19,28 @@ class naiveBayesInputValidator():
 				print("Error: No Attributes")
 				sys.exit(-1)
 
-			for attr in attr_freq:
-				if type(attr_freq[target1][attr]) != type(int) or attr_freq[target1][attr] < 0:
+			for attr in attr_freq[target1]:
+				if not isinstance(attr_freq[target1][attr], int) or attr_freq[target1][attr] < 0:
 					print("Invalid Value Error: Attribute Frequencies take non-negative integer value")
 
 
 			for target2 in target_list:
-				if attr_freq[target1] != attr_freq[target2]:
+				if list(attr_freq[target1]) != list(attr_freq[target2]):
 					print("Attribute Inconsitency Error: Number of attributes must remain consistent across targets")
 					sys.exit(-1)
 
 
-	def checkZeroDivisionError(instance_count, target_count, laplace_constant):
+	def checkZeroDivisionError(self, instance_count, target_count, laplace_constant):
 		
 		if instance_count == 0:
 			print("ZeroDivisionError: Attribute frequency for each attribute is zero for all targets")
+			sys.exit(-1)
 
 		if laplace_constant == 0:
 			for target in target_count:
-				if target_count[target] == 0:
+				if target_count[target] == 0 and laplace_constant == 0:
 					print("Warning: One or more target variable are not trained on any instance, setting laplace constant to 1 to avoid ZeroDivisionError")
 					return 1
+
+		return laplace_constant
 
