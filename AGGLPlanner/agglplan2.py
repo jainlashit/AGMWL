@@ -48,11 +48,21 @@ from agglplanchecker import *
 # from generate import Generate
 
 if __name__ == '__main__': # program domain problem result
+	def find_arg(l, v):
+	    for idx, value in enumerate(l):
+	        if v == value:
+				if len(l)>i+1:
+					return l[i+1]
+		return None
+	def showHelp():
+		print 'Usage\n\t', sys.argv[0], 'domain.aggl init.xml target.aggt [-o result.plan] [-l learning_algorithm[:data_file]]'
+		print '-l    The learning algorithm can be one of the following (case insensitive): None, NaiveBayes, DummySemantics'
+		print '      The default option is "None"'
 	# We check if the program was run with all necessary arguments.
 	# If there aren't all the arguments, we show an error mesage with how to use the program.
 	# If there are all the arguments, we keep them in local variables.
-	if len(sys.argv)<5:
-		print 'Usage\n\t', sys.argv[0], ' domain.aggl init.xml target.aggt store.data [result.plan]'
+	if len(sys.argv)<4:
+		showHelp()
 	else:
 		## the file that contains the grammar rules
 		domainFile = sys.argv[1]
@@ -60,18 +70,17 @@ if __name__ == '__main__': # program domain problem result
 		worldFile  = sys.argv[2]
 		## the goal o target world status
 		targetFile = sys.argv[3]
-		## probability distribution over
-		trainFile = sys.argv[4]
-		# threshFile = "prb_distrb.prb"
-		# g = Generate()
-		# g.get_distrb(worldFile, targetFile, trainFile, threshFile)
 		## the file name where we keep the results of the program
-		result = None
-		if len(sys.argv)>5:
-			result = sys.argv[5]
+		result = find_arg('-o')
+		## probability distribution generator
+		trainFile = find_arg('-l')
+		if trainFile == None: trainFile = 'none'
+		trainList = trainFile.split(':')
+		trainMethod = trainList[0].lower()
+		if not trainMethod in [ 'none', 'naivebayes', 'dummysemantics' ]:
+			showHelp()
 
 		print '\nGenerating search code...'
-
 		## Generate domain Python file <--- like aggl2agglpy.
 		# agmData is a variable of AGMFileData class, in AGGL.py file.
 		# First: we CHECK the grammar. Is a parseAGGL.py's class

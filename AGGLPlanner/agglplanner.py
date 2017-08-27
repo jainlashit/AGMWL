@@ -446,7 +446,6 @@ class AGGLPlanner(object):
 		self.externalStopFlag.set(1)
 
 	def run(self):
-		print 'AGGLPlanner.run'
 		# Search initialization
 		## This attribute indicates the maximum size that can reach the graph
 		self.maxWorldSize = maxWorldIncrement+len(self.initWorld.graph.nodes.keys())

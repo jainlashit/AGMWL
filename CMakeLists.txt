@@ -162,11 +162,11 @@ WRAP_PYTHON_QRC( resource )
 if (ROBOCOMP_SUPPORT)
    add_library(agmdummy SHARED AGMWorldModel.cpp AGMExecutive.cpp AGMCommonBehavior.cpp Planning.cpp )
    set(ROBOCOMP_ADDITIONAL_SRC AGMExecutive.cpp Planning.cpp )
+   add_dependencies(agm agmdummy)
 endif (ROBOCOMP_SUPPORT)
 
 add_library(agm SHARED ${AGM_CODE} ${XMLVIEWER3D_MOCS} )
 target_link_libraries(agm ${Boost_LIBRARIES} ${LIBS} ${PYTHON_LIBRARIES} ${OSG_LIBS} ${QT_LIBRARIES} )
-add_dependencies(agm agmdummy)
 
 add_executable ( testagm tools/testagm.cpp ${ROBOCOMP_ADDITIONAL_SRC} )
 target_link_libraries ( testagm agm -L. -L.. -lagm ${LIBS} ${ICE_LIBS} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
@@ -242,6 +242,7 @@ INSTALL(PROGRAMS "${CMAKE_SOURCE_DIR}/AGGLPlanner/agglplan2.py" DESTINATION ${IN
 
 INSTALL(PROGRAMS "${CMAKE_SOURCE_DIR}/AGGLPlanner/agglcheckhierarchical.py" DESTINATION ${INST_BIN_PATH}/ RENAME agglcheckhierarchical )
 INSTALL(PROGRAMS "${CMAKE_SOURCE_DIR}/python/pyparsinglocal.py" DESTINATION ${INST_SHARE_PATH}/ RENAME pyparsinglocal.py )
+
 INSTALL(PROGRAMS "${CMAKE_SOURCE_DIR}/AGGLPlanner/agglplannerserver.py" DESTINATION ${INST_BIN_PATH}/ RENAME agglplannerserver )
 INSTALL(FILES "${CMAKE_SOURCE_DIR}/AGGLPlanner/agglplanner.thrift" DESTINATION ${INST_SHARE_PATH}/ )
 

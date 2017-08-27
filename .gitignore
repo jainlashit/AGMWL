@@ -28,4 +28,5 @@ doc/Doxyfile
 testagm
 tools/agminner/bin/
 tools/agmmission/bin/
+store.data
 
